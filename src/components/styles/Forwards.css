@@ -1,0 +1,20 @@
+.Forwards {
+    grid-row-start: 1;
+    grid-row-end: 10;
+    grid-column-start: 10;
+    grid-column-end: 13;
+    color: black;
+    padding: 1em;
+    margin: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.playerList {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}

@@ -1,0 +1,7 @@
+.MenuButton {
+    position: fixed;
+    color: black;
+    padding: 0.5em;
+    margin: 0;
+    cursor: pointer;
+}
