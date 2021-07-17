@@ -1,0 +1,14 @@
+.Bonuses {
+    color: black;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    text-align: center;
+    flex-wrap: wrap;
+}
+
+.bonusSymbol {
+    font-size: 1.5em;
+}
