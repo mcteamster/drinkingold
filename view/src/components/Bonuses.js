@@ -8,7 +8,7 @@ function Bonuses(props) {
         {bonus.symbol}
       </div>
       <div className="bonusValue number">
-        {(bonus.id === 0) ? `${bonus.value}` : `+${bonus.value}`}
+        {(bonus.class === "B0") ? `${bonus.value}` : `+${bonus.value}`}
       </div>
     </li>)
   );

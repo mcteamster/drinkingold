@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
 
 .centered {
-  display: flex;
+  display: -webkit-flex;
   justify-content: center;
   align-items: center;
 }
@@ -21,6 +21,10 @@
 
 .invisible {
   opacity: 0;
+}
+
+.invisible:active {
+  opacity: 1;
 }
 
 .App {

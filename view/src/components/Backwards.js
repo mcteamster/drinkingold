@@ -5,7 +5,7 @@ import Bonuses from './Bonuses.js';
 function Backwards(props) {
   const players = props.players.sort((a,b)=> a.name > b.name).sort((a,b)=> a.totalScore < b.totalScore); // Sort By Score, Tiebreak Alphabetically
   const playerList = players.map((player)=>
-    (player.left === true) &&
+    (player.active !== true) &&
     (<li key={player.id}>
       <Player info={player} view="backwards" />
     </li>)

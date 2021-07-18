@@ -2,7 +2,7 @@
     color: black;
     font-size: 1.5em;
     width: 100%;
-    display: flex;
+    display: -webkit-flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-around;

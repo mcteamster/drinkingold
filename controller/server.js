@@ -3,60 +3,51 @@ const WebSocket = require('ws');
 const server = new WebSocket.Server({
     port: 8080
 });
+const GameState = require("../model/gameState.js");
+let gs = new GameState("0000"); // this should be initialised in the setup phase
+console.dir(gs);
 
-let sockets = [];
+let sockets = []; // This should be stored in the database
 server.on('connection', function (socket) {
-    // Add to sockets list
     sockets.push(socket);
 
-    // Send latest game state
-    socket.send(JSON.stringify(gameState));
+    // Send the game state
+    socket.send(JSON.stringify(gs));
 
-    // Process inputs
+    // 1. Process inputs
     socket.on('message', function (msg) {
-        gameState.meta.card = Math.floor(Math.random() * 35);
-        sockets.forEach(s => s.send(JSON.stringify(gameState)));
-        console.log(msg);
+        msg = JSON.parse(msg);
+
+        // Switch depending on Game Phase
+        switch (gs.meta.phase) {
+            case "setup":
+                // Configure Game, Start Gameplay Loop
+                break;
+            case "play":
+                socket.send(JSON.stringify(gs.setIntent(msg))); // Collect intent from all players until time is up or all players have explicitly answered
+                break;
+            case "endgame":
+                break;
+            default:
+                console.error(new Date() + "Missing Game Phase");
+                break;
+        }
     });
 
-    // When a socket closes, or disconnects, remove it
-    socket.on('close', ()=>{
+    socket.on('close', () => {
         sockets = sockets.filter(s => s !== socket);
     });
 });
 
-let gameState = {
-    meta: {
-        room: "0000",
-        round: 1,
-        turn: 1,
-        phase: "resolve",
-        card: Math.floor(Math.random() * 35),
-        score: 20
-    },
-    players: [
-        { "id": 1, "colour": "red", "name": "mcteamster", "roundScores": [1], "totalScore": 0, "left": false },
-        { "id": 2, "colour": "lightblue", "name": "tonz", "roundScores": [2], "totalScore": 50, "left": false },
-        { "id": 3, "colour": "green", "name": "skree", "roundScores": [3], "totalScore": 28, "left": true },
-        { "id": 4, "colour": "yellow", "name": "toose", "roundScores": [4], "totalScore": 10, "left": false },
-        { "id": 5, "colour": "pink", "name": "boose", "roundScores": [5], "totalScore": 0, "left": false },
-        { "id": 6, "colour": "cyan", "name": "gong", "roundScores": [6], "totalScore": 50, "left": true },
-        { "id": 7, "colour": "lime", "name": "ronz", "roundScores": [7], "totalScore": 28, "left": false },
-        { "id": 8, "colour": "orange", "name": "jojo", "roundScores": [8], "totalScore": 10, "left": false }
-    ],
-    hazards: [
-        { "id": 1, "symbol": "👮", "active": true },
-        { "id": 2, "symbol": "🤮", "active": true },
-        { "id": 3, "symbol": "🚕", "active": true },
-        { "id": 4, "symbol": "⛔", "active": true },
-        { "id": 5, "symbol": "💔", "active": true }
-    ],
-    bonuses: [
-        { "id": 0, "symbol": "🍺", "active": true, "value": 2 },
-        { "id": 1, "symbol": "🍗", "active": false, "value": 5 },
-        { "id": 2, "symbol": "🌯", "active": false, "value": 5 },
-        { "id": 3, "symbol": "🍕", "active": true, "value": 5 },
-        { "id": 4, "symbol": "🛑", "active": false, "value": 5 },
-        { "id": 5, "symbol": "💸", "active": false, "value": 5 }
-    ]
-}
+// 2. Gameplay Loop: Update Game State and Publish When Time is Up
+let gameLoop = setInterval(()=>{
+    if(gs.meta.phase === "play") {
+        gs.update();
+    } else if(gs.meta.phase === "endgame") {
+        clearInterval(gameLoop); // Stop Updating Game State
+        console.debug(new Date() + "The Game Is Over");
+    }
+
+    // Broadcast Update
+    sockets.forEach(s => s.send(JSON.stringify(gs)));
+}, 200);
