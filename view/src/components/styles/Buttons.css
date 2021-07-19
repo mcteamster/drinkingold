@@ -9,20 +9,12 @@
 
 .Yeah {
     z-index: 9;
-    grid-column-start: 7;
-    grid-column-end: 13;
-    grid-row-start: 1;
-    grid-row-end: 10;
     background-color: green;
     font-size: 5em;
 }
 
 .Nah {
     z-index: 9;
-    grid-column-start: 1;
-    grid-column-end: 7;
-    grid-row-start: 1;
-    grid-row-end: 10;
     background-color: gold;
     font-size: 5em;
 }

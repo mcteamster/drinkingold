@@ -11,11 +11,6 @@ import MenuButton, { Yeah, Nah } from './components/Buttons';
 // Card Data
 import cardData from './data/cardData.json';
 
-// Session Storage
-sessionStorage.setItem("roomID", 0);
-sessionStorage.setItem("playerID", 3);
-sessionStorage.setItem("clientSecret", "abc");
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -24,7 +19,7 @@ class App extends React.Component {
         room: "0000",
         round: 0,
         turn: 0,
-        phase: "play",
+        phase: "setup",
         card: 0,
         score: 0
       },
@@ -46,42 +41,55 @@ class App extends React.Component {
     // Websocket Connection
     const ws = new WebSocket('ws://10.0.0.2:8080');
 
-    // Bind Listeners to YEAH and NAH buttons
+    // Bind Listeners to YEAH and NAH buttons (Multipurpose Input Elements)
     ws.onopen = () => {
+      // YES
       document.querySelector('#yes').addEventListener('click', () => {
-        // Update local state in advance
-        let p = this.state.players.find((x)=>x.id === parseInt(sessionStorage.getItem("playerID")))
-        if(p.active === true || p.active === this.state.meta.turn){
-          p.active = true;
-        };
-        this.setState(this.state);
-
-        // Send Intent
         let msg = {
           roomID: sessionStorage.getItem("roomID"),
           playerID: sessionStorage.getItem("playerID"),
-          clientSecret: sessionStorage.getItem("clientSecret"),
-          vote: true,
-          data: "YEAH!"
+          clientSecret: sessionStorage.getItem("clientSecret")
         };
+
+        if (this.state.meta.phase === "play") {
+          // Signal Intent and update local state in advance
+          let p = this.state.players.find((x) => x.id === parseInt(sessionStorage.getItem("playerID")))
+          if (p.active === true || p.active === this.state.meta.turn) {
+            p.active = true;
+          };
+          this.setState(this.state);
+          msg.data = true;
+        } else if (this.state.meta.phase === "setup") {
+          // Set Player Name
+          msg.data = "INSERT NAME HERE";
+        }
+
+        // Send
         ws.send(JSON.stringify(msg));
       });
-      document.querySelector('#no').addEventListener('click', () => {
-        // Update local state in advance
-        let p = this.state.players.find((x)=>x.id === parseInt(sessionStorage.getItem("playerID")))
-        if(p.active === true || p.active === this.state.meta.turn){
-          p.active = this.state.meta.turn;
-        };
-        this.setState(this.state);
 
+      // NO
+      document.querySelector('#no').addEventListener('click', () => {
         // Send Intent 
         let msg = {
           roomID: sessionStorage.getItem("roomID"),
           playerID: sessionStorage.getItem("playerID"),
-          clientSecret: sessionStorage.getItem("clientSecret"),
-          vote: false,
-          data: "nah."
+          clientSecret: sessionStorage.getItem("clientSecret")
         };
+
+        if (this.state.meta.phase === "play") {
+          // Update local state in advance
+
+          let p = this.state.players.find((x) => x.id === parseInt(sessionStorage.getItem("playerID")))
+          if (p.active === true || p.active === this.state.meta.turn) {
+            p.active = this.state.meta.turn;
+          };
+          this.setState(this.state);
+          msg.data = false;
+        } else if (this.state.meta.phase === "setup") {
+          msg.data = "start"
+        }
+
         ws.send(JSON.stringify(msg));
       });
     };
@@ -89,29 +97,27 @@ class App extends React.Component {
     // Update Game State
     ws.onmessage = (msg) => {
       msg = JSON.parse(msg.data);
-      (msg.meta?.type === "gameState") && this.setState(msg);
+      console.dir(msg);
+      if (msg.meta?.type === "gameState") {
+        this.setState(msg);
+      } else if (msg.meta?.type === "secret") {
+        sessionStorage.setItem("playerID", msg.id);
+        sessionStorage.setItem("clientSecret", msg.secret);
+      }
     };
   }
 
   render() {
-    if(this.state.meta.phase === "play"){
-      return (
-        <div className="App">
-          <MenuButton />
-          <Backwards players={this.state.players} bonuses={this.state.bonuses} />
-          <Card data={cardData[this.state.meta.card]} />
-          <Forwards players={this.state.players} hazards={this.state.hazards} score={this.state.meta.score} />
-          <Yeah />
-          <Nah />
-        </div>
-      );       
-    } else if(this.state.meta.phase === "endgame") {
-      return (
-        <div>END OF GAME</div>
-      )
-    } else {
-      // Handle Setup
-    }
+    return (
+      <div className="App">
+        <MenuButton />
+        <Backwards players={this.state.players} bonuses={this.state.bonuses} round={this.state.meta.round} />
+        <Card data={cardData[this.state.meta.card]} />
+        <Forwards players={this.state.players} hazards={this.state.hazards} score={this.state.meta.score} />
+        <Yeah />
+        <Nah />
+      </div>
+    );
   }
 }
 

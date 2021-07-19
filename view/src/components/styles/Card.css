@@ -1,9 +1,5 @@
 .Card {
     z-index: 1;
-    grid-row-start: 1;
-    grid-row-end: 10;
-    grid-column-start: 4;
-    grid-column-end: 10;
     background-color: beige;
     color: black;
     padding: 1em;
@@ -12,8 +8,8 @@
     border: 0.25em black solid;
     text-align: center;
     display: grid;
-    grid-template-rows: 1fr 7fr 1fr;
-    grid-template-columns: 1fr 7fr 1fr;
+    grid-template-rows: 1fr 3fr 1fr;
+    grid-template-columns: 1fr 3fr 1fr;
 }
 
 .Value {

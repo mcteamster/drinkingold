@@ -2,14 +2,13 @@
 const cardData = require("../view/src/data/cardData.json");
 
 class GameState {
-    // Add a more sophisticated constructor
     constructor(roomID) {
         this.meta = {
             type: "gameState",
             room: roomID,
             round: 1,
             turn: 1,
-            phase: "play",
+            phase: "setup",
             card: 0,
             score: 0
         },
@@ -18,14 +17,6 @@ class GameState {
             this.burnt = [], // Cards that will no longer appear
             this.delta = [], // This is what the client will animate
             this.players = [
-                { "id": 1, "colour": "red", "name": "mcteamster", "roundScores": new Array(5), "totalScore": 0, "active": true },
-                { "id": 2, "colour": "lightblue", "name": "tonz", "roundScores": new Array(5), "totalScore": 0, "active": true },
-                { "id": 3, "colour": "green", "name": "skree", "roundScores": new Array(5), "totalScore": 0, "active": true },
-                { "id": 4, "colour": "yellow", "name": "toose", "roundScores": new Array(5), "totalScore": 0, "active": true },
-                { "id": 5, "colour": "pink", "name": "boose", "roundScores": new Array(5), "totalScore": 0, "active": true },
-                { "id": 6, "colour": "cyan", "name": "gong", "roundScores": new Array(5), "totalScore": 0, "active": true },
-                { "id": 7, "colour": "lime", "name": "ronz", "roundScores": new Array(5), "totalScore": 0, "active": true },
-                { "id": 8, "colour": "orange", "name": "jojo", "roundScores": new Array(5), "totalScore": 0, "active": true }
             ],
             this.hazards = [
                 { "id": 1, "class": "A", "symbol": "👮", "active": 0 },
@@ -47,13 +38,10 @@ class GameState {
     // Receive Player Input
     setIntent(player) {
         try {
-            // Validate Some attributes of the player input object
-            console.log(player.playerID, player.clientSecret); // TODO
-
             // Set activity
             let p = this.players.find(x => x.id == player.playerID);
             if (p.active === true || p.active === this.meta.turn) {
-                (player.vote === true) ? p.active = true : p.active = this.meta.turn; // Mark when you left (the card after which you leave)
+                (player.data === true) ? p.active = true : p.active = this.meta.turn; // Mark when you left (the card after which you leave)
             }
             return new Date();
         } catch (err) {
@@ -148,8 +136,12 @@ class GameState {
         this.deck = new Array(cardData.length).fill().map((a, i) => i).filter(b => !this.burnt.includes(b)); // Filter out burnt cards
         console.log(this.burnt, this.deck);
 
+        // Reset Card and Score
+        this.meta.card = 0;
+        this.meta.score = 0;
+
         // Next Round
-        if (this.meta.round++ > 5) {
+        if (++this.meta.round > 5) {
             this.meta.phase = "endgame";
         }
     }
