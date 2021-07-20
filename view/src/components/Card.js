@@ -2,7 +2,7 @@ import './styles/Card.css';
 
 function Card(props) {
   return (
-    <div className="Card">
+    <div className="Card play">
         <Title text={props.data.title} />
         <FlavourText text={props.data.description} />
         <Value data={props.data} />
@@ -22,8 +22,7 @@ function FlavourText(props) {
     return (
         <div className="FlavourText centered">
             <p>
-                {props.text}&nbsp;
-                Spin a yarn about what just happened lol
+                {props.text}&nbsp;add some dynamic stuff here too i dunno like comment on who just bailed and whatnot
             </p>
         </div>
     );

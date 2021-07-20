@@ -19,12 +19,27 @@
   font-size: 2em;
 }
 
+.setup {
+  visibility: hidden;
+}
+
+.play {
+  visibility: visible;
+}
+
+.endgame {
+  visibility: hidden;
+}
+
 .invisible {
   opacity: 0;
 }
 
 .invisible:active {
   opacity: 1;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
 }
 
 .App {
@@ -40,7 +55,7 @@
   .App {
     max-height: calc(90vh - 70px);
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 2em 40vh auto auto;
+    grid-template-rows: 1em 40vh 40vh auto;
     background-color: goldenrod;
   }
 
@@ -76,7 +91,7 @@
 @media screen and (min-aspect-ratio: 3/2) {
   .App {
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: auto;
+    grid-template-rows: 1fr;
   }
 
   .Backwards {

@@ -2,7 +2,18 @@
 class Lobby {
     constructor(roomID){
         this.roomID = roomID,
+        this.sockets = []
         this.players = []
+        this.colours = [
+            'red',
+            'yellow',
+            'green',
+            'cyan',
+            'lightblue',
+            'pink',
+            'orange',
+            'lime'
+        ]
     }
 
     addPlayer(player, gs){
@@ -19,7 +30,7 @@ class Lobby {
                 }
             }
             // Add to Game State and Lobby
-            gs.players.push({ "id": p.id, "colour": "red", "name": p.name, "roundScores": new Array(5), "totalScore": 0, "active": true });
+            gs.players.push({ "id": p.id, "colour": this.colours.pop(), "name": p.name, "roundScores": new Array(5), "totalScore": 0, "active": true });
             this.players.push(p);
             return p
         }

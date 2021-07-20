@@ -1,13 +1,5 @@
 import './styles/Buttons.css';
 
-function MenuButton() {
-  return (
-    <div className="MenuButton">
-      ❌
-    </div>
-  );
-}
-
 function Yeah() {
   return (
     <div className="Yeah centered invisible" id="yes">
@@ -24,5 +16,4 @@ function Nah() {
   );
 }
 
-export default MenuButton;
 export { Yeah, Nah };

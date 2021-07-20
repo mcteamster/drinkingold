@@ -30,7 +30,7 @@ function Backwards(props) {
   }
 
   return (
-    <div className="Backwards">
+    <div className="Backwards play">
       <div className="head">{ordinal}&nbsp;🌙</div>
       <ul className="playerList">
         {playerList}

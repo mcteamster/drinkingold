@@ -10,9 +10,8 @@ let gs = new GameState("1234");
 const Lobby = require("../model/lobby.js");
 let lobby = new Lobby("1234");
 
-let sockets = []; // This should be stored in the database
 server.on('connection', function (socket) {
-    sockets.push(socket);
+    lobby.sockets.push(socket);
 
     // Send the game state
     socket.send(JSON.stringify(gs));
@@ -31,11 +30,12 @@ server.on('connection', function (socket) {
             case "setup":
                 console.log(msg);
                 if(msg.playerID === "1" && msg.data === "start"){
-                    gs.meta.phase = "play"; // Host can start the game
+                    gs.meta.phase = "play"; // Host can start the game 
+                    tick(5000);
                 } else {
                     socket.send(JSON.stringify(lobby.addPlayer(msg, gs))); // Add player to the lobby and return secret
                 }
-                sockets.forEach(s => s.send(JSON.stringify(gs))); // Broadcast Updates
+                lobby.sockets.forEach(s => s.send(JSON.stringify(gs))); // Broadcast Updates
                 break;
             case "play":
                 // Collect intent from all players until time is up
@@ -52,19 +52,21 @@ server.on('connection', function (socket) {
     });
 
     socket.on('close', () => {
-        sockets = sockets.filter(s => s !== socket);
+        lobby.sockets = lobby.sockets.filter(s => s !== socket);
     });
 });
 
 // 2. Gameplay Loop: Update Game State and Publish When Time is Up
-let gameLoop = setInterval(()=>{
-    if(gs.meta.phase === "play") {
-        gs.update();
-    } else if(gs.meta.phase === "endgame") {
-        clearInterval(gameLoop); // Stop Updating Game State
-        console.debug(new Date() + "The Game Is Over");
-    }
-
-    // Broadcast Update
-    sockets.forEach(s => s.send(JSON.stringify(gs)));
-}, 5000);
+function tick(timeout){
+    setTimeout(()=>{
+        if(gs.meta.phase === "play") {
+            gs.update();
+            tick(5000);
+        } else if(gs.meta.phase === "endgame") {
+            console.debug(new Date() + "The Game Is Over");
+        }
+    
+        // Broadcast Update
+        lobby.sockets.forEach(s => s.send(JSON.stringify(gs)));
+    }, timeout);
+}

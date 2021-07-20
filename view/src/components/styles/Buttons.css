@@ -1,20 +1,11 @@
-.MenuButton {
-    z-index: 10;
-    position: fixed;
-    color: black;
-    padding: 0.5em;
-    margin: 0;
-    cursor: pointer;
-}
-
 .Yeah {
-    z-index: 9;
+    z-index: 3;
     background-color: green;
     font-size: 5em;
 }
 
 .Nah {
-    z-index: 9;
+    z-index: 3;
     background-color: gold;
     font-size: 5em;
 }

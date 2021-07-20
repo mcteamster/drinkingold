@@ -8,7 +8,7 @@
     border: 0.25em black solid;
     text-align: center;
     display: grid;
-    grid-template-rows: 1fr 3fr 1fr;
+    grid-template-rows: 1fr 3fr auto;
     grid-template-columns: 1fr 3fr 1fr;
 }
 
