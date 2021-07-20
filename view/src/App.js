@@ -23,7 +23,8 @@ class App extends React.Component {
         turn: 0,
         phase: "setup",
         card: 0,
-        score: 0
+        score: 0,
+        timeout: 10000
       },
       players: [],
       hazards: [
@@ -41,7 +42,7 @@ class App extends React.Component {
 
   componentDidMount() {
     // Websocket Connection
-    this.ws = new WebSocket('ws://10.0.0.2:8080');
+    this.ws = new WebSocket('ws://localhost:8080');
 
     // Bind Listeners to Buttons
     this.ws.onopen = () => {
@@ -84,6 +85,10 @@ class App extends React.Component {
         document.querySelector("#roomInput").style.display = "none";
         document.querySelector("#nameInput").style.display = "none";
         document.querySelector("#enterGame").style.display = "none";
+      } else if(msg.meta?.type === "connection") {
+        document.querySelectorAll(".setup").forEach(e=>e.style.visibility = "visible");
+        document.querySelectorAll(".play").forEach(e=>e.style.visibility = "hidden");
+        document.querySelectorAll(".endgame").forEach(e=>e.style.visibility = "hidden");
       }
     };
   }

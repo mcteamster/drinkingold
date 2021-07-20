@@ -5,68 +5,69 @@ const server = new WebSocket.Server({
 });
 
 // Model
-const GameState = require("../model/gameState.js");
-let gs = new GameState("1234");
 const Lobby = require("../model/lobby.js");
-let lobby = new Lobby("1234");
 
 server.on('connection', function (socket) {
-    lobby.sockets.push(socket);
-
     // Send the game state
-    socket.send(JSON.stringify(gs));
+    socket.send(JSON.stringify({meta: {type: "connection"}}));
 
     // 1. Process inputs
     socket.on('message', function (msg) {
         // Expect roomID, playerID, clientSecret, and data
         msg = JSON.parse(msg);
         
-        // TODO AUTH HERE - Load in the respective gamestate // unauth = spectate?
-        // Check against the lobby object, check is name and secret match
-        // DATABASE CALL get this
+        // Lobby Init
+        if(!this.lobby){
+            if(parseInt(msg.roomID < 10000)){
+                // Lookup Lobby an Retrieve
+                //this.lobby = something? DB READ
+            } else {
+                this.lobby = new Lobby("1234") // RNG a lobby number, store in DB
+            }
+            this.lobby.sockets.push(socket);
+        }
+
+        // Authenticate against the lobby
+        let authed = this.lobby.auth(msg);
 
         // Switch depending on Game Phase
-        switch (gs.meta.phase) {
+        switch (this.lobby.gs.meta.phase) {
             case "setup":
-                console.log(msg);
-                if(msg.playerID === "1" && msg.data === "start"){
-                    gs.meta.phase = "play"; // Host can start the game 
-                    tick(5000);
+                if(authed && msg.playerID === "1" && msg.data === "start"){
+                    this.lobby.gs.meta.phase = "play"; // Host can start the game 
+                    tick(this.lobby, 5000);
                 } else {
-                    socket.send(JSON.stringify(lobby.addPlayer(msg, gs))); // Add player to the lobby and return secret
+                    socket.send(JSON.stringify(this.lobby.addPlayer(msg))); // Add player to the lobby and return secret
                 }
-                lobby.sockets.forEach(s => s.send(JSON.stringify(gs))); // Broadcast Updates
+                this.lobby.sockets.forEach(s => s.send(JSON.stringify(this.lobby.gs))); // Broadcast Updates
                 break;
             case "play":
-                // Collect intent from all players until time is up
-                socket.send(JSON.stringify(gs.setIntent(msg)));
+                // Collect intent from all players until time is up // how to rejoin in the midle of a game??
+                authed && socket.send(JSON.stringify(this.lobby.gs.setIntent(msg)));
                 break;
             case "endgame":
                 break;
             default:
-                lobby = new Lobby("1234"); // New Lobby
-                gs = new GameState("1234"); // Setup a new room // RNG a room ID
-                // DATABASE CALL store this
                 break;
         }
     });
 
     socket.on('close', () => {
-        lobby.sockets = lobby.sockets.filter(s => s !== socket);
+        if(this.lobby){this.lobby.sockets = this.lobby.sockets.filter(s => s !== socket);}
     });
 });
 
 // 2. Gameplay Loop: Update Game State and Publish When Time is Up
-function tick(timeout){
+function tick(lobby, timeout){
     setTimeout(()=>{
-        if(gs.meta.phase === "play") {
-            gs.update();
-            tick(5000);
-        } else if(gs.meta.phase === "endgame") {
+        if(lobby.gs.meta.phase === "play") {
+            lobby.gs.update();
+            tick(lobby, 5000);
+        } else if(lobby.gs.meta.phase === "endgame") {
             console.debug(new Date() + "The Game Is Over");
         }
     
         // Broadcast Update
-        lobby.sockets.forEach(s => s.send(JSON.stringify(gs)));
+        lobby.sockets.forEach(s => s.send(JSON.stringify(lobby.gs)));
     }, timeout);
 }

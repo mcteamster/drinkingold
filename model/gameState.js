@@ -53,6 +53,7 @@ class GameState {
     // Calculate new Game State
     update() {
         // Housekeeping
+        console.debug(new Date() + "Turn: " + this.meta.turn) // Debug
         this.history.push(cardData[this.meta.card]); // Archive old card
         this.deck = this.deck.filter((c => c !== this.meta.card)) // Remove from deck
         this.meta.turn++; // Increment Turn (lock in the intents);
@@ -105,7 +106,6 @@ class GameState {
                     console.error(new Date() + "Card Type Mismatch");
                     break;
             }
-            console.log(newCard);
         } else {
             this.reset(); // Next Round
         }
@@ -134,7 +134,6 @@ class GameState {
 
         // Replenish the deck
         this.deck = new Array(cardData.length).fill().map((a, i) => i).filter(b => !this.burnt.includes(b)); // Filter out burnt cards
-        console.log(this.burnt, this.deck);
 
         // Reset Card and Score
         this.meta.card = 0;

@@ -1,4 +1,6 @@
 // Lobby Class
+const GameState = require("../model/gameState.js");
+
 class Lobby {
     constructor(roomID){
         this.roomID = roomID,
@@ -13,10 +15,11 @@ class Lobby {
             'pink',
             'orange',
             'lime'
-        ]
+        ],
+        this.gs = new GameState(roomID)
     }
 
-    addPlayer(player, gs){
+    addPlayer(player){
         // Check for Unique Name
         if(this.players.find(x=>x.name === player.data)){
             return (new Date + "Name Taken");
@@ -30,9 +33,17 @@ class Lobby {
                 }
             }
             // Add to Game State and Lobby
-            gs.players.push({ "id": p.id, "colour": this.colours.pop(), "name": p.name, "roundScores": new Array(5), "totalScore": 0, "active": true });
+            this.gs.players.push({ "id": p.id, "colour": this.colours.pop(), "name": p.name, "roundScores": new Array(5), "totalScore": 0, "active": true });
             this.players.push(p);
             return p
+        }
+    }
+
+    auth(player){
+        if(this.players.find(x=>(x.id == player.playerID) && (x.secret == player.clientSecret))){
+            return new Date;
+        } else {
+            return false;
         }
     }
 }
