@@ -13,6 +13,7 @@ function Landing(props) {
     return (
       <div className="Landing setup">
         <h1>Drinkin' Gold</h1>
+        <div>{props.room}</div>
         <ul className="playerList">
             {playerList}
         </ul>

@@ -3,10 +3,11 @@ import './App.css';
 
 // React Components
 import React from 'react';
-import Landing from './components/Landing.js';
-import Card from './components/Card.js';
+import Landing from './components/Landing';
+import Card from './components/Card';
 import Backwards from './components/Backwards';
 import Forwards from './components/Forwards';
+import Timer from './components/Timer';
 import { Yeah, Nah } from './components/Buttons';
 import Endgame from './components/Endgame';
 
@@ -42,7 +43,7 @@ class App extends React.Component {
 
   componentDidMount() {
     // Websocket Connection
-    this.ws = new WebSocket('ws://localhost:8080');
+    this.ws = new WebSocket('ws://10.0.0.2:8080');
 
     // Bind Listeners to Buttons
     this.ws.onopen = () => {
@@ -71,39 +72,47 @@ class App extends React.Component {
     this.ws.onmessage = (msg) => {
       msg = JSON.parse(msg.data);
       console.dir(msg);
-      if (msg.meta?.type === "gameState") {
-        this.setState(msg);
-        document.querySelectorAll(".setup").forEach(e=>e.style.visibility = (msg.meta.phase === "setup") ? "visible" : "hidden");
-        document.querySelectorAll(".play").forEach(e=>e.style.visibility = (msg.meta.phase === "play") ? "visible" : "hidden");
-        document.querySelectorAll(".endgame").forEach(e=>e.style.visibility = (msg.meta.phase === "endgame") ? "visible" : "hidden");
-      } else if (msg.meta?.type === "secret") {
-        sessionStorage.setItem("playerID", msg.id);
-        sessionStorage.setItem("clientSecret", msg.secret);
-        if(msg.id === 1){
-          document.querySelector("#startGame").style.display = "block";
-        }
-        document.querySelector("#roomInput").style.display = "none";
-        document.querySelector("#nameInput").style.display = "none";
-        document.querySelector("#enterGame").style.display = "none";
-      } else if(msg.meta?.type === "connection") {
-        document.querySelectorAll(".setup").forEach(e=>e.style.visibility = "visible");
-        document.querySelectorAll(".play").forEach(e=>e.style.visibility = "hidden");
-        document.querySelectorAll(".endgame").forEach(e=>e.style.visibility = "hidden");
+      switch(msg.meta?.type) {
+        case "gameState":
+          this.setState(msg);
+          document.querySelectorAll(".setup").forEach(e => e.style.visibility = (msg.meta.phase === "setup") ? "visible" : "hidden");
+          document.querySelectorAll(".play").forEach(e => e.style.visibility = (msg.meta.phase === "play") ? "visible" : "hidden");
+          document.querySelectorAll(".endgame").forEach(e => e.style.visibility = (msg.meta.phase === "endgame") ? "visible" : "hidden");
+          break;
+        case "secret":
+          sessionStorage.setItem("playerID", msg.id);
+          sessionStorage.setItem("clientSecret", msg.secret);
+          if (msg.id === 1) {
+            document.querySelector("#startGame").style.display = "block";
+          }
+          document.querySelector("#roomInput").style.display = "none";
+          document.querySelector("#nameInput").style.display = "none";
+          document.querySelector("#enterGame").style.display = "none";
+          break;
+        case "rejoin":
+          document.querySelector("#roomInput").style.display = "none";
+          document.querySelector("#nameInput").style.display = "none";
+          document.querySelector("#enterGame").style.display = "none";
+          break;
+        case "error":
+          console.error(new Date() + msg.meta.data);
+          break;
+        default:
+          break;
       }
     };
   }
 
   // Send Message
-  sendMsg(type){
+  sendMsg(type) {
     let msg = {
-      roomID: sessionStorage.getItem("roomID"),
       playerID: sessionStorage.getItem("playerID"),
       clientSecret: sessionStorage.getItem("clientSecret")
     };
-    
-    if(this.state.meta.phase === "play") {
+
+    if (this.state.meta.phase === "play") {
       // Signal Intent and update local state in advance
-      if(type === "yeah") {
+      if (type === "yeah") {
         try {
           let p = this.state.players.find((x) => x.id === parseInt(sessionStorage.getItem("playerID")))
           if (p.active === true || p.active === this.state.meta.turn) {
@@ -113,7 +122,7 @@ class App extends React.Component {
         } catch (err) {
           console.error("Player ID Not Found")
         }
-      } else if(type === "nah"){
+      } else if (type === "nah") {
         try {
           let p = this.state.players.find((x) => x.id === parseInt(sessionStorage.getItem("playerID")))
           if (p.active === true || p.active === this.state.meta.turn) {
@@ -127,9 +136,13 @@ class App extends React.Component {
       this.setState(this.state);
     } else if (this.state.meta.phase === "setup") {
       // Set Player Name
-      if(type === "enter"){
-        msg.data = document.getElementById("nameInput").value;  
-      } else if(type === "start") {
+      if (type === "enter") {
+        let roomInput = document.getElementById("roomInput").value;
+        if(roomInput < 10000 && roomInput > 0){
+          msg.roomID = Math.floor(roomInput);
+        }
+        msg.data = document.getElementById("nameInput").value;
+      } else if (type === "start") {
         msg.data = "start";
       }
     }
@@ -140,10 +153,11 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <Landing players={this.state.players} />
+        <Landing players={this.state.players} room={this.state.meta.room}/>
         <Backwards players={this.state.players} bonuses={this.state.bonuses} round={this.state.meta.round} />
         <Card data={cardData[this.state.meta.card]} />
         <Forwards players={this.state.players} hazards={this.state.hazards} score={this.state.meta.score} />
+        <Timer turntime={this.state.meta.turntime} />
         <Yeah />
         <Nah />
         <Endgame players={this.state.players} />

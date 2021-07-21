@@ -10,7 +10,8 @@ class GameState {
             turn: 1,
             phase: "setup",
             card: 0,
-            score: 0
+            score: 0,
+            turntime: 100
         },
             this.deck = new Array(cardData.length).fill().map((a, i) => i), // Cards that haven't been drawn
             this.history = [], // What cards have been drawn
@@ -53,7 +54,6 @@ class GameState {
     // Calculate new Game State
     update() {
         // Housekeeping
-        console.debug(new Date() + "Turn: " + this.meta.turn) // Debug
         this.history.push(cardData[this.meta.card]); // Archive old card
         this.deck = this.deck.filter((c => c !== this.meta.card)) // Remove from deck
         this.meta.turn++; // Increment Turn (lock in the intents);
