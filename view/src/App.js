@@ -43,7 +43,7 @@ class App extends React.Component {
 
   componentDidMount() {
     // Websocket Connection
-    this.ws = new WebSocket('ws://10.0.0.2:8080');
+    this.ws = new WebSocket('ws://10.0.0.2:80');
 
     // Bind Listeners to Buttons
     this.ws.onopen = () => {
@@ -60,11 +60,21 @@ class App extends React.Component {
       // YES
       document.querySelector('#yes').addEventListener('click', () => {
         this.sendMsg("yeah");
+        let yes = document.querySelector('#yes')
+        yes.classList.add('visible');
+        setTimeout(()=>{
+          yes.classList.remove('visible');
+        }, 1000);
       });
 
       // NO
       document.querySelector('#no').addEventListener('click', () => {
         this.sendMsg("nah");
+        let no = document.querySelector('#no')
+        no.classList.add('visible');
+        setTimeout(()=>{
+          no.classList.remove('visible');
+        }, 1000);
       });
     };
 
@@ -154,10 +164,9 @@ class App extends React.Component {
     return (
       <div className="App">
         <Landing players={this.state.players} room={this.state.meta.room}/>
-        <Backwards players={this.state.players} bonuses={this.state.bonuses} round={this.state.meta.round} />
-        <Card data={cardData[this.state.meta.card]} />
-        <Forwards players={this.state.players} hazards={this.state.hazards} score={this.state.meta.score} />
-        <Timer turntime={this.state.meta.turntime} />
+        <Backwards players={this.state.players} bonuses={this.state.bonuses} />
+        <Card data={cardData[this.state.meta.card]} meta={this.state.meta} />
+        <Forwards players={this.state.players} hazards={this.state.hazards} />
         <Yeah />
         <Nah />
         <Endgame players={this.state.players} />

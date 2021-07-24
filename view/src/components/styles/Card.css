@@ -19,13 +19,53 @@
 
 .Title {
     grid-row: 1;
-    grid-column-start: 1;
-    grid-column-end: 4;
-    font-size: 2em;
+    grid-column: 2;
+    font-size: 1.5em;
 }
 
 .FlavourText {
     grid-row: 3;
     grid-column-start: 1;
     grid-column-end: 3;
+}
+
+#score {
+    font-size: 2em;
+    grid-row: 1;
+    grid-column: 3;
+    justify-content: center;
+    align-items: center;
+}
+
+#stats {
+    grid-row: 1;
+    grid-column: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+@media screen and (max-aspect-ratio: 3/2) {
+    .Card {
+        margin: 0;
+        padding-top: 2em;
+        border: none;
+        border-radius: 0;
+    }
+
+    .Title {
+        font-size: 2em;
+    }
+
+    .FlavourText {
+        font-size: 1.5em;
+    }
+
+    .Value {
+        font-size: 1.5em;
+    }
+
+    #score {
+        font-size: 2em;
+    }
 }

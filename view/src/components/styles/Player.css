@@ -5,6 +5,7 @@
     align-items: center;
     justify-content: flex-start;
     text-align: center;
+    font-weight: bold;
 }
 
 .meeple {
@@ -13,7 +14,15 @@
     max-width: 10em;
     margin: 0.5em;
     margin-left: 0;
-    border: 0.1em black solid;
-    background-color: black;
     font-size: 0.75em;
+}
+
+@media screen and (max-aspect-ratio: 3/2) {
+    .Player {
+        font-size: 1.25em;
+    }
+    
+    .meeple {
+        font-size: 1em;
+    }
 }

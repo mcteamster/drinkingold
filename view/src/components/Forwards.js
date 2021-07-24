@@ -13,9 +13,7 @@ function Forwards(props) {
 
   return (
     <div className="Forwards play">
-      <div className="head">
-        <span className="number">{(props.score>0) && props.score}</span>🍻
-      </div>
+      <div className="head">👍</div>
       <ul className="playerList">
         {playerList}
       </ul>

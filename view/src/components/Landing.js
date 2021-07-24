@@ -10,10 +10,12 @@ function Landing(props) {
       </li>)
     );
 
+    let lobbyMessage = (props.room) ? `🔑 ${props.room}` : `"Get on the beers"`
+
     return (
       <div className="Landing setup">
         <h1>Drinkin' Gold</h1>
-        <div>{props.room}</div>
+        <div className="number" id="lobbyMessage">{lobbyMessage}</div>
         <ul className="playerList">
             {playerList}
         </ul>

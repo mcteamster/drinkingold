@@ -12,19 +12,32 @@
     text-align: center;
 }
 
+h1 {
+    font-size: 4em;
+    margin: 0;
+    padding: 0;
+}
+
 input {
-    margin: 0.25em;
-    padding: 0.25em;
+    margin: 0.5em;
+    padding: 0.5em;
     border-radius: 5vw 15vw 5vw 15vw/15vw 5vw 15vw 5vw;
+    border-style: none;
     background: yellow;
     text-align: center;
-    font-size: 0.75em;
+    font-size: 1em;
     width: 10em;
+}
+
+#lobbyMessage {
+    font-size: 2em;
+    padding: 1em;
 }
 
 #enterGame {
     cursor: pointer;
-    margin: 0.25em;
+    font-size: 2em;
+    margin: 0.75em;
     padding: 0.25em;
     border-radius: 5vw 15vw 5vw 15vw/15vw 5vw 15vw 5vw;
     background-color: gold;
@@ -33,9 +46,15 @@ input {
 #startGame {
     cursor: pointer;
     display: none;
-    margin: 0.25em;
+    font-size: 2em;
+    margin: 0.75em;
     padding: 0.25em;
     border-radius: 5vw 15vw 5vw 15vw/15vw 5vw 15vw 5vw;
     background-color: green;
 }
 
+@media screen and (max-aspect-ratio: 3/2) {
+    input {
+        font-size: 1.5em;
+    }
+}

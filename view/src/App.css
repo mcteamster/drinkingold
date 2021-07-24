@@ -16,7 +16,7 @@
 }
 
 .head {
-  font-size: 2em;
+  font-size: 3em;
 }
 
 .setup {
@@ -24,7 +24,7 @@
 }
 
 .play {
-  visibility: visible;
+  visibility: hidden;
 }
 
 .endgame {
@@ -35,7 +35,7 @@
   opacity: 0;
 }
 
-.invisible:active {
+.visible {
   opacity: 1;
   position: absolute;
   width: 100vw;
@@ -47,30 +47,41 @@
   height: 100vh;
   max-height: 100vh;
   font-family: 'Indie Flower', cursive;
-  font-size: calc(3vmin);
+  font-size: calc(3vh);
   display: grid;
 }
 
-@media screen and (max-aspect-ratio: 3/2) {
+@media screen and (max-aspect-ratio: 3/4) {
   .App {
     max-height: calc(90vh - 70px);
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1em 40vh 40vh auto;
+    grid-template-rows: calc(45vh - 35px) calc(45vh - 35px);
     background-color: goldenrod;
+    font-size: calc(3vw);
   }
 
   .Backwards {
-    grid-row: 3;
+    grid-row: 2;
     grid-column: 1;
+    flex-direction: column-reverse;
+    border-top: 0.5em solid black;
+    max-height: calc(45vh - 35px);
   }
 
   .Forwards {
-    grid-row: 3;
+    grid-row: 2;
     grid-column: 2;
+    flex-direction: column-reverse;
+    border-top: 0.5em solid black;
+    max-height: calc(45vh - 35px);
+  }
+
+  .Hazards {
+    padding-bottom: 1em;
   }
 
   .Card {
-    grid-row: 2;
+    grid-row: 1;
     grid-column-start: 1;
     grid-column-end: 3;
   }
@@ -78,17 +89,21 @@
   .Yeah {
     grid-column: 2;
     grid-row-start: 1;
-    grid-row-end: 5;
+    grid-row-end: 4;
   }
 
   .Nah {
     grid-column: 1;
     grid-row-start: 1;
-    grid-row-end: 5;
+    grid-row-end: 4;
+  }
+
+  .mobileHide {
+    display: none;
   }
 }
 
-@media screen and (min-aspect-ratio: 3/2) {
+@media screen and (min-aspect-ratio: 3/4) {
   .App {
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr;
@@ -97,11 +112,13 @@
   .Backwards {
     grid-row: 1;
     grid-column: 1;
+    flex-direction: column;
   }
 
   .Forwards {
     grid-row: 1;
     grid-column: 4;
+    flex-direction: column;
   }
 
   .Card {
