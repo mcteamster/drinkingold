@@ -1,5 +1,5 @@
 [
-    {"id": 0, "type": "points", "value": 0, "symbol": "🍺", "title": "Pregame", "description": "Get ready! Here we go again"},
+    {"id": 0, "type": "start", "value": 0, "symbol": "🏁", "title": "Pregame", "description": "Get ready! Here we go again"},
     {"id": 1, "type": "points", "value": 1, "symbol": "🍺", "title": "get on the beers", "description": "description"},
     {"id": 2, "type": "points", "value": 2, "symbol": "🍺", "title": "get on the beers", "description": "description"},
     {"id": 3, "type": "points", "value": 3, "symbol": "🍺", "title": "Bitter Victoria", "description": "Tastes just the way Melburnians feel"},
