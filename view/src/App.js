@@ -43,7 +43,7 @@ class App extends React.Component {
 
   componentDidMount() {
     // Websocket Connection
-    this.ws = new WebSocket('ws://10.0.0.2:80');
+    this.ws = new WebSocket('ws://drinkingold.mcteamster.com');
 
     // Bind Listeners to Buttons
     this.ws.onopen = () => {
