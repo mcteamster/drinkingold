@@ -93,9 +93,9 @@ class GameState {
                         let losers = this.players.filter(p => (p.active === true || p.active === this.meta.turn));
                         losers.forEach(player => {
                             player.roundScores[this.meta.round - 1] = 0;
+                            player.active = false;
                         });
                         this.burnt.push(newCard.id); // Burn this hazard
-                        this.reset();
                     }
                     break;
                 case "bonus":

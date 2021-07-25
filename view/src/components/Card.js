@@ -2,19 +2,19 @@ import './styles/Card.css';
 import Timer from "./Timer";
 
 function Card(props) {
-  return (
-    <div className="Card play">
-        <div className="number centered" id="stats">
-            <div>🔑&nbsp;{props.meta.room}</div>
-            <div>🌙&nbsp;{props.meta.round}/5</div>
-            <Timer turntime={props.meta.turntime} />
+    return (
+        <div className="Card play">
+            <div className="number centered" id="stats">
+                <div>🔑&nbsp;{props.meta.room}</div>
+                <div>🌙&nbsp;{props.meta.round}/5</div>
+                <Timer turntime={props.meta.turntime} />
+            </div>
+            <Title text={props.data.title} />
+            <div className="number centered" id="score">{(props.meta.score > 0) && props.meta.score}🍻</div>
+            <FlavourText text={props.data.description} />
+            <Value data={props.data} />
         </div>
-        <Title text={props.data.title} />
-        <div className="number centered" id="score">{(props.meta.score>0) && props.meta.score}🍻</div>
-        <FlavourText text={props.data.description} />
-        <Value data={props.data} />
-    </div>
-  );
+    );
 }
 
 function Title(props) {

@@ -7,7 +7,6 @@ import Landing from './components/Landing';
 import Card from './components/Card';
 import Backwards from './components/Backwards';
 import Forwards from './components/Forwards';
-import Timer from './components/Timer';
 import { Yeah, Nah } from './components/Buttons';
 import Endgame from './components/Endgame';
 
@@ -24,8 +23,7 @@ class App extends React.Component {
         turn: 0,
         phase: "setup",
         card: 0,
-        score: 0,
-        timeout: 10000
+        score: 0
       },
       players: [],
       hazards: [
@@ -43,12 +41,14 @@ class App extends React.Component {
 
   componentDidMount() {
     // Websocket Connection
-    this.ws = new WebSocket('ws://drinkingold.mcteamster.com');
+    this.ws = new WebSocket('ws://drinkingold.mcteamster.com'); // Prod
+    //this.ws = new WebSocket('ws://10.0.0.2'); // Dev
 
     // Bind Listeners to Buttons
     this.ws.onopen = () => {
       // Submit
-      document.querySelector('#enterGame').addEventListener('click', () => {
+      let enter = document.querySelector('#enterGame');
+      enter.addEventListener('click', () => {
         this.sendMsg("enter");
       });
 
@@ -59,22 +59,26 @@ class App extends React.Component {
 
       // YES
       document.querySelector('#yes').addEventListener('click', () => {
-        this.sendMsg("yeah");
-        let yes = document.querySelector('#yes')
-        yes.classList.add('visible');
-        setTimeout(()=>{
-          yes.classList.remove('visible');
-        }, 1000);
+        if(this.state.meta.card !== 0){
+          this.sendMsg("yeah");
+          let yes = document.querySelector('#yes')
+          yes.classList.add('visible');
+          setTimeout(()=>{
+            yes.classList.remove('visible');
+          }, 1000);
+        }
       });
 
       // NO
       document.querySelector('#no').addEventListener('click', () => {
-        this.sendMsg("nah");
-        let no = document.querySelector('#no')
-        no.classList.add('visible');
-        setTimeout(()=>{
-          no.classList.remove('visible');
-        }, 1000);
+        if(this.state.meta.card !== 0){
+          this.sendMsg("nah");
+          let no = document.querySelector('#no')
+          no.classList.add('visible');
+          setTimeout(()=>{
+            no.classList.remove('visible');
+          }, 1000);
+        }
       });
     };
 
@@ -85,6 +89,12 @@ class App extends React.Component {
       switch(msg.meta?.type) {
         case "gameState":
           this.setState(msg);
+          document.getElementById("up").classList.remove("selected", "grey");
+          document.getElementById("down").classList.remove("selected", "grey");
+          if(this.state.meta.card === 0 || this.state.players.filter(p=>(p.active === true)).length === 0) {
+            document.getElementById("up").classList.add("grey");
+            document.getElementById("down").classList.add("grey");
+          }
           document.querySelectorAll(".setup").forEach(e => e.style.visibility = (msg.meta.phase === "setup") ? "visible" : "hidden");
           document.querySelectorAll(".play").forEach(e => e.style.visibility = (msg.meta.phase === "play") ? "visible" : "hidden");
           document.querySelectorAll(".endgame").forEach(e => e.style.visibility = (msg.meta.phase === "endgame") ? "visible" : "hidden");
@@ -124,6 +134,8 @@ class App extends React.Component {
       // Signal Intent and update local state in advance
       if (type === "yeah") {
         try {
+          document.querySelector("#up").classList.add("selected");
+          document.querySelector("#down").classList.remove("selected");
           let p = this.state.players.find((x) => x.id === parseInt(sessionStorage.getItem("playerID")))
           if (p.active === true || p.active === this.state.meta.turn) {
             p.active = true;
@@ -134,6 +146,8 @@ class App extends React.Component {
         }
       } else if (type === "nah") {
         try {
+          document.querySelector("#up").classList.remove("selected");
+          document.querySelector("#down").classList.add("selected");
           let p = this.state.players.find((x) => x.id === parseInt(sessionStorage.getItem("playerID")))
           if (p.active === true || p.active === this.state.meta.turn) {
             p.active = this.state.meta.turn;
@@ -164,9 +178,9 @@ class App extends React.Component {
     return (
       <div className="App">
         <Landing players={this.state.players} room={this.state.meta.room}/>
-        <Backwards players={this.state.players} bonuses={this.state.bonuses} />
+        <Backwards players={this.state.players} bonuses={this.state.bonuses} meta={this.state.meta} />
         <Card data={cardData[this.state.meta.card]} meta={this.state.meta} />
-        <Forwards players={this.state.players} hazards={this.state.hazards} />
+        <Forwards players={this.state.players} hazards={this.state.hazards} meta={this.state.meta} />
         <Yeah />
         <Nah />
         <Endgame players={this.state.players} />
