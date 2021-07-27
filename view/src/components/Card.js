@@ -9,6 +9,7 @@ function Card(props) {
                 <div>🌙&nbsp;{props.meta.round}/5</div>
                 <Timer turntime={props.meta.turntime} />
             </div>
+            <div id="image" className="centered head">{props.data.symbol}</div>
             <Title text={props.data.title} />
             <div className="number centered" id="score">{(props.meta.score > 0) && props.meta.score}🍻</div>
             <FlavourText text={props.data.description} />
