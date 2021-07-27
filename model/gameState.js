@@ -11,7 +11,7 @@ class GameState {
             phase: "setup",
             card: 0,
             score: 0,
-            turntime: 30000
+            turntime: 20000
         },
             this.deck = new Array(cardData.length).fill().map((a, i) => i), // Cards that haven't been drawn
             this.history = [], // What cards have been drawn
