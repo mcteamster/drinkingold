@@ -133,3 +133,6 @@ function tick(lobby, timeout) {
         lobby.sockets.forEach(s => s.send(JSON.stringify(lobby.gs)));
     }, timeout);
 }
+
+// Welcome to the Game
+console.log(new Date() + " Welcome to Drinkin' Gold")

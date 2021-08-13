@@ -4,7 +4,7 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  background-color: goldenrod;
+  background-color: beige;
 }
 
 li {
@@ -16,4 +16,10 @@ li {
 ul {
   padding: 0;
   margin: 0;
+}
+
+@media screen and (max-aspect-ratio: 4/5) {
+  #root {
+    max-height: calc(90vh - 70px);
+  }
 }

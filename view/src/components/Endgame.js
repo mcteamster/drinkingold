@@ -6,13 +6,14 @@ function Endgame(props) {
     const playerList = players.map((player)=>
       (player.active === true) &&
       (<li key={player.id}>
-        <Player info={player} view="backwards"/>
+        <Player info={player} score={0}/>
       </li>)
     );
 
     return (
       <div className="Endgame endgame">
         <h1>Final Scores</h1>
+        <div className="head">🏅</div>
         <ul className="playerList">
             {playerList}
         </ul>

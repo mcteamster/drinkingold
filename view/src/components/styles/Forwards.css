@@ -16,9 +16,10 @@
     align-items: flex-start;
 }
 
-@media screen and (max-aspect-ratio: 3/2) {
+@media screen and (max-aspect-ratio: 4/5) {
     .Forwards {
         margin: 0;
+        align-items: flex-end;
     }
 
     .playerList {

@@ -23,7 +23,7 @@ input {
     padding: 0.5em;
     border-radius: 5vw 15vw 5vw 15vw/15vw 5vw 15vw 5vw;
     border-style: none;
-    background: yellow;
+    background: gold;
     text-align: center;
     font-size: 1em;
     width: 10em;
@@ -40,7 +40,7 @@ input {
     margin: 0.75em;
     padding: 0.25em;
     border-radius: 5vw 15vw 5vw 15vw/15vw 5vw 15vw 5vw;
-    background-color: gold;
+    background-color: goldenrod;
 }
 
 #startGame {
@@ -53,7 +53,7 @@ input {
     background-color: green;
 }
 
-@media screen and (max-aspect-ratio: 3/2) {
+@media screen and (max-aspect-ratio: 4/5) {
     input {
         font-size: 1.5em;
     }

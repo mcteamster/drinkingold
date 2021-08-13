@@ -5,15 +5,14 @@ function Card(props) {
     return (
         <div className="Card play">
             <div className="number centered" id="stats">
-                <div>🔑&nbsp;{props.meta.room}</div>
-                <div>🌙&nbsp;{props.meta.round}/5</div>
+                <div>🌙&nbsp;{props.meta.round} of 5</div>
                 <Timer turntime={props.meta.turntime} />
+                <div>🔑&nbsp;{props.meta.room}</div>
             </div>
-            <div id="image" className="centered head">{props.data.symbol}</div>
+            <div id="image" className="centered">{props.data.symbol}</div>
             <Title text={props.data.title} />
-            <div className="number centered" id="score">{(props.meta.score > 0) && props.meta.score}🍻</div>
+            <div className="number centered" id="score">{props.meta.score} 🍻 tonight</div>
             <FlavourText text={props.data.description} />
-            <Value data={props.data} />
         </div>
     );
 }
@@ -34,14 +33,6 @@ function FlavourText(props) {
             </p>
         </div>
     );
-}
-
-function Value(props) {
-    return (
-        <div className="Value centered number">
-            {(props.data.type === "points") ? `+${props.data.value}${props.data.symbol}` : `${props.data.symbol}`}
-        </div>
-    )
 }
 
 export default Card;

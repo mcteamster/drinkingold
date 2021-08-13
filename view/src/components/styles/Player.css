@@ -17,7 +17,7 @@
     font-size: 0.75em;
 }
 
-@media screen and (max-aspect-ratio: 3/2) {
+@media screen and (max-aspect-ratio: 4/5) {
     .Player {
         font-size: 1.25em;
     }

@@ -181,6 +181,8 @@ class App extends React.Component {
         <Backwards players={this.state.players} bonuses={this.state.bonuses} meta={this.state.meta} />
         <Card data={cardData[this.state.meta.card]} meta={this.state.meta} />
         <Forwards players={this.state.players} hazards={this.state.hazards} meta={this.state.meta} />
+        <div className="head grey centered" id="down">👎</div>
+        <div className="head grey centered" id="up">👍</div>
         <Yeah />
         <Nah />
         <Endgame players={this.state.players} />

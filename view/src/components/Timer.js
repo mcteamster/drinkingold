@@ -13,9 +13,12 @@ class Timer extends React.Component{
   componentDidMount() {
     setInterval(()=>{
       let t;
+      let glass = document.querySelector(".Card");
       if(this.turntime === this.props.turntime - 1000){
-        if(this.state.time > 100){
-          t = this.state.time - 100;
+        let fullness = 100*this.state.time/this.turntime - 10;
+        glass.style.backgroundImage = `linear-gradient(0deg, goldenrod, ${fullness}%, goldenrod, ${fullness}%, beige)`;
+        if(this.state.time > 30){
+          t = this.state.time - 30;
         } else {
           t = 0;
         }
@@ -24,18 +27,21 @@ class Timer extends React.Component{
         this.turntime = t;
       }
       this.setState({time: t});
-    }, 100)
+    }, 30)
   }
 
+  /*
   formatTime() {
     let clock = this.state.time;
     return `⏰ ${Math.floor(clock/1000)}.${Math.floor((clock%1000)/100)}`;
   }
+  */
 
   render(){
-    let clock = this.formatTime();
+    //let clock = this.formatTime();
     return(
-      <div className="Timer play">{clock}</div>
+      //<div className="Timer play">{clock}</div>
+      <div></div>
     )
   }
 }

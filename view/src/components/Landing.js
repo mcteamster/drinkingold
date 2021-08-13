@@ -6,7 +6,7 @@ function Landing(props) {
     const playerList = players.map((player)=>
       (player.active === true) &&
       (<li key={player.id}>
-        <Player info={player} view="forwards"/>
+        <Player info={player} score={0}/>
       </li>)
     );
 
@@ -14,7 +14,7 @@ function Landing(props) {
 
     return (
       <div className="Landing setup">
-        <h1>Drinkin' Gold</h1>
+        <h1>Drinkin' Gold<br></br>🍻</h1>
         <div className="number" id="lobbyMessage">{lobbyMessage}</div>
         <ul className="playerList">
             {playerList}
