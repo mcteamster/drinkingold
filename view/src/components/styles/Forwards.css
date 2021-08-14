@@ -46,5 +46,6 @@
 
     .playerList {
         display: flex;
+        flex-direction: column;
     }
 }
