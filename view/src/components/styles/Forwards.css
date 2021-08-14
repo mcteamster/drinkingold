@@ -10,16 +10,38 @@
     text-align: center;
 }
 
-.playerList {
+.Turn {
+    padding: 0.5em;
+    margin: 0.5em;
+    border-radius: 0.5em;
+    text-align: left;
+    font-size: 0.66em;
+    background-color: lightblue;
+    opacity: 0.90;
+}
+
+.historyList {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: flex-end;
+    justify-content: flex-end;
+    max-height: 50vh;
+    min-height: 50vh;
+    overflow-y: hidden;
+    border-radius: 0.5em;
+    box-shadow: 
+        inset 0px 5vh 28px -5vh lightgrey,
+        inset 0px -5vh 28px -5vh lightgrey;
 }
 
 @media screen and (max-aspect-ratio: 4/5) {
     .Forwards {
         margin: 0;
         align-items: flex-end;
+    }
+
+    .historyList {
+        visibility: hidden;
     }
 
     .playerList {

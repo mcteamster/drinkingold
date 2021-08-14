@@ -27,12 +27,13 @@ class App extends React.Component {
         score: 0,
         turntime: 20000
       },
+      history: [],
       players: [],
       hazards: [
-        { "id": 1, "class": "A", "symbol": "👮", "active": 0 },
+        { "id": 1, "class": "A", "symbol": "🚨", "active": 0 },
         { "id": 2, "class": "B", "symbol": "🤮", "active": 0 },
         { "id": 3, "class": "C", "symbol": "☣️", "active": 0 },
-        { "id": 4, "class": "D", "symbol": "⛔", "active": 0 },
+        { "id": 4, "class": "D", "symbol": "🥾", "active": 0 },
         { "id": 5, "class": "E", "symbol": "💔", "active": 0 }
       ],
       bonuses: [
@@ -58,6 +59,8 @@ class App extends React.Component {
         } else if (name.value !== '') {
           room.style.display = "block";
           name.style.display = "none";
+          document.querySelector("#enterGame").style.display = "none";
+          join.innerText = "Enter";
         } else {
           name.style.border = '0.25em solid red';
         }
@@ -104,6 +107,25 @@ class App extends React.Component {
           }, 1000);
         }
       });
+
+      // Show Scores
+      document.querySelector('#showScore').addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        document.querySelector('#scoreboard').classList.toggle("invisible");
+      });
+
+      // Show History
+      document.querySelector('#showHistory').addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        let historyList = document.querySelector('.historyList');
+        if(historyList.style.visibility === "hidden") {
+          historyList.style.visibility = "visible";
+        } else {
+          historyList.style.visibility = "hidden";
+        };
+      });
     };
 
     // Update Game State
@@ -113,12 +135,8 @@ class App extends React.Component {
       switch(msg.meta?.type) {
         case "gameState":
           this.setState(msg);
-          document.getElementById("up").classList.remove("selected", "grey");
-          document.getElementById("down").classList.remove("selected", "grey");
-          if(this.state.meta.card === 0 || this.state.players.filter(p=>(p.active === true)).length === 0) {
-            document.getElementById("up").classList.add("grey");
-            document.getElementById("down").classList.add("grey");
-          }
+          //if(this.state.meta.card === 0 || this.state.players.filter(p=>(p.active === true)).length === 0) {
+          //}
           document.querySelectorAll(".setup").forEach(e => e.style.visibility = (msg.meta.phase === "setup") ? "visible" : "hidden");
           document.querySelectorAll(".play").forEach(e => e.style.visibility = (msg.meta.phase === "play") ? "visible" : "hidden");
           document.querySelectorAll(".endgame").forEach(e => e.style.visibility = (msg.meta.phase === "endgame") ? "visible" : "hidden");
@@ -163,8 +181,6 @@ class App extends React.Component {
       // Signal Intent and update local state in advance
       if (type === "yeah") {
         try {
-          document.querySelector("#up").classList.add("selected");
-          document.querySelector("#down").classList.remove("selected");
           let p = this.state.players.find((x) => x.id === parseInt(sessionStorage.getItem("playerID")))
           if (p.active === true || p.active === this.state.meta.turn) {
             p.active = true;
@@ -175,8 +191,6 @@ class App extends React.Component {
         }
       } else if (type === "nah") {
         try {
-          document.querySelector("#up").classList.remove("selected");
-          document.querySelector("#down").classList.add("selected");
           let p = this.state.players.find((x) => x.id === parseInt(sessionStorage.getItem("playerID")))
           if (p.active === true || p.active === this.state.meta.turn) {
             p.active = this.state.meta.turn;
@@ -209,13 +223,13 @@ class App extends React.Component {
         <Landing players={this.state.players} room={this.state.meta.room}/>
         <Backwards players={this.state.players} bonuses={this.state.bonuses} meta={this.state.meta} />
         <Card data={cardData[this.state.meta.card]} meta={this.state.meta}/>
-        <Forwards players={this.state.players} hazards={this.state.hazards} meta={this.state.meta} />
+        <Forwards history={this.state.history} hazards={this.state.hazards} meta={this.state.meta} />
         <Timer turntime={this.state.meta.turntime} hazards={this.state.hazards} cardType={cardData[this.state.meta.card].type}/>
-        <div className="head grey centered" id="down">👎</div>
-        <div className="head grey centered" id="up">👍</div>
         <Yeah />
         <Nah />
         <Endgame players={this.state.players} />
+        <div id='showHistory'></div>
+        <div id='showScore'></div>
       </div>
     );
   }

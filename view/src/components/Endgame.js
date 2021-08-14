@@ -6,7 +6,7 @@ function Endgame(props) {
     const playerList = players.map((player)=>
       (player.active === true) &&
       (<li key={player.id}>
-        <Player info={player} score={0}/>
+        <Player info={player} score={0} turn={0}/>
       </li>)
     );
 

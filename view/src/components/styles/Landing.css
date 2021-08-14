@@ -57,7 +57,7 @@ input {
 }
 
 #startGame {
-    background-color: green;
+    background-color: gold;
 }
 
 @media screen and (max-aspect-ratio: 4/5) {

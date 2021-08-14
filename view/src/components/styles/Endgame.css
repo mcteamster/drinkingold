@@ -1,6 +1,7 @@
 .Endgame {
     z-index: 4;
     color: midnightblue;
+    background-color: beige;
     grid-row-start: 1;
     grid-row-end: 200;
     grid-column-start: 1;

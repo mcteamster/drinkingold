@@ -17,7 +17,7 @@ function Backwards(props) {
   return (
     <div className="Backwards play">
       <div className="head">🏅</div>
-      <ul className="playerList">
+      <ul className="playerList" id="scoreboard">
         {playerList}
       </ul>
       <Bonuses info={props.bonuses}/>

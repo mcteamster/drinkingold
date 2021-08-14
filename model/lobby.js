@@ -3,6 +3,7 @@ const GameState = require("../model/gameState.js");
 
 class Lobby {
     constructor(roomID) {
+        this.creationTime = new Date(),
         this.roomID = roomID,
         this.sockets = []
         this.players = []
@@ -16,7 +17,7 @@ class Lobby {
             'orange',
             'lime'
         ],
-            this.gs = new GameState(roomID)
+        this.gs = new GameState(roomID)
     }
 
     addPlayer(player) {

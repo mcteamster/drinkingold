@@ -27,14 +27,13 @@ class Timer extends React.Component{
         this.turntime = t;
         if(this.props.cardType === "hazard") {
           this.hazardMax = Math.max(...(this.props.hazards.map(h => h.active)));
-          console.log(this.hazardMax)
           if(this.hazardMax >= 2){
             this.color = "red";
           } else {
             this.color = "aqua";
           }
         } else if(this.props.cardType === "bonus") {
-          this.color = "gold"
+          this.color = "yellow"
         } else {
           this.color = "goldenrod"
         }

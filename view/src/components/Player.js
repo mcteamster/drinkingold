@@ -8,6 +8,7 @@ function Player(props) {
   }
   let percent = 100*(props.info.totalScore/(props.info.totalScore + score));
   let width = 0.1*(props.info.totalScore + score);
+  let color = (parseInt(sessionStorage.getItem("playerID")) === parseInt(props.info.id)) ? "forestgreen" : "darkslateblue";
 
   let style = {
     width: `${width}em`,
@@ -17,10 +18,14 @@ function Player(props) {
     backgroundImage: `linear-gradient(90deg, ${props.info.colour}, ${percent}%, ${props.info.colour}, ${percent}%, rgba(255,255,255,0.66))` 
   }
 
+  let nameStyle = {
+    color: color
+  }
+
   return (
     <div className="Player">
       <div className="meeple centered number" style={style}>{props.info.totalScore+score}</div>
-      <div>{props.info.name}</div>
+      <div style={nameStyle}>{props.info.name}</div>
     </div>
   );
 }

@@ -27,7 +27,7 @@ function FlavourText(props) {
     return (
         <div className="FlavourText centered">
             <p>
-                {props.text}&nbsp;<b>-- Kick On??</b>
+                {props.text}
             </p>
         </div>
     );

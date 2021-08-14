@@ -13,8 +13,8 @@ app.use(express.static("./view/build"));
 
 // Model
 const Lobby = require("../model/lobby.js");
-lobbies = []; // TEMP STORE FOR LOBBIES - THIS SHOULD BE DB
-rooms = []; // TEMP STORE OF ACTIVE ROOM NUMBERS
+lobbies = [];
+rooms = [];
 
 // Websocket Controller
 ws.on('connection', function (socket) {
@@ -71,8 +71,8 @@ ws.on('connection', function (socket) {
                         let l = new Lobby(room);
                         this.lobby = l;
                         this.lobby.sockets.push(socket);
-                        lobbies.push(l); // TODO DB
-                        rooms.push(room); // TODO DB 
+                        lobbies.push(l);
+                        rooms.push(room); 
                         break;
                     } else {
                         retries++;
@@ -121,21 +121,33 @@ ws.on('connection', function (socket) {
 
 // 2. Gameplay Loop: Update Game State and Publish When Time is Up
 function tick(lobby, timeout) {
-    setTimeout(() => {
-        if (lobby.gs.meta.phase === "play") {
-            lobby.gs.update();
-            tick(lobby, lobby.gs.meta.turntime);
-        } else if (lobby.gs.meta.phase === "endgame") {
-            console.debug(new Date() + ` Game ${lobby.gs.meta.room} is Over`);
-            // TODO DB CLEANUP LOBBIES
+    lobby.nextTurn = setTimeout(()=>{nextTurn(lobby)}, timeout);
+}
+
+function nextTurn(lobby) {
+    if (lobby.gs.meta.phase === "play") {
+        lobby.gs.update();
+        tick(lobby, lobby.gs.meta.turntime);
+    } else if (lobby.gs.meta.phase === "endgame") {
+        console.debug(new Date() + ` Game ${lobby.gs.meta.room} is Over`);
+        rooms = rooms.filter(r => r != lobby.roomID);
+        lobbies = lobbies.filter(l => l !== lobby);
+    }
+    // Broadcast Update
+    lobby.sockets.forEach(s => s.send(JSON.stringify(lobby.gs)));
+}
+
+// 3. Cleanup abandoned lobbies
+setInterval(()=>{
+    lobbies.forEach(lobby => {
+        let age = new Date() - lobby.creationTime;
+        if(age > 1000*60*60){
+            console.debug(new Date() + ` Cleaned ${lobby.roomID}`);
             rooms = rooms.filter(r => r != lobby.roomID);
             lobbies = lobbies.filter(l => l !== lobby);
         }
-
-        // Broadcast Update
-        lobby.sockets.forEach(s => s.send(JSON.stringify(lobby.gs)));
-    }, timeout);
-}
+    })
+}, 1000*60*10)
 
 // Welcome to the Game
 console.log(new Date() + " Welcome to Drinkin' Gold")

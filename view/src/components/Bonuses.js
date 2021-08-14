@@ -15,6 +15,7 @@ function Bonuses(props) {
 
   return (
     <div className="Bonuses">
+      <li className="tip">Bail to claim these for yourself</li>
       {bonusList}
     </div>
   );

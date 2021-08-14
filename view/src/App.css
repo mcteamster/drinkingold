@@ -47,6 +47,11 @@
   background: white;
 }
 
+.tip {
+  width: 100%;
+  font-size: 0.75em;
+}
+
 .App {
   background-color: beige;
   height: 100vh;
@@ -54,18 +59,6 @@
   font-family: 'Indie Flower', cursive;
   font-size: calc(3vh);
   display: grid;
-}
-
-#down {
-  grid-row: 1;
-  grid-column: 1;
-  display: none;
-}
-
-#up {
-  grid-row: 1;
-  grid-column: 4;
-  display: none;
 }
 
 @media screen and (max-aspect-ratio: 4/5) {
@@ -112,6 +105,30 @@
     grid-row-end: 4;
   }
 
+  #showScore {
+    z-index: 4;
+    visibility: visible;
+    position: absolute;
+    width: 6em;
+    height: 6em;
+    padding: 0;
+    margin: 0;
+    bottom: calc(10vh + 70px);
+    left: 0;
+  }
+  
+  #showHistory {
+    z-index: 4;
+    visibility: visible;
+    position: absolute;
+    width: 6em;
+    height: 6em;
+    padding: 0;
+    margin: 0;
+    bottom: calc(10vh + 70px);
+    right: 0;
+  }
+
   .mobileHide {
     display: none;
   }
@@ -156,5 +173,13 @@
     grid-row: 1;
     grid-column-start: 1;
     grid-column-end: 3;
+  }
+
+  #showScore {
+    display: none;
+  }
+  
+  #showHistory {
+    display: none;
   }
 }

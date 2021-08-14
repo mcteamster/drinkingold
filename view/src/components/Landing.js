@@ -10,7 +10,7 @@ function Landing(props) {
       </li>)
     );
 
-    let lobbyMessage = (props.room) ? `🔑 ${props.room}` : `🍻`
+    let lobbyMessage = (props.room) ? `🔑 ${props.room}` : ""
 
     return (
       <div className="Landing setup">
@@ -21,13 +21,12 @@ function Landing(props) {
           👎 Tap left ⬅️ to go home and pickup some goodies 🍕<br></br>
           ⚠️ Look out for hazards - struck twice and your night is ruined 🤮
         </div>
-        <div className="number" id="lobbyMessage">{lobbyMessage}</div>
         <ul className="playerList">
             {playerList}
         </ul>
-        <input id="nameInput" type="text" placeholder="Name" maxLength="12"></input>
+        <div className="number" id="lobbyMessage">{lobbyMessage}</div>
+        <input id="nameInput" type="text" placeholder="Name 👋" maxLength="12"></input>
         <input id="roomInput" className="hidden" type="number" placeholder="Room 🔑" min="1000" max="9999"></input>
-
         <div id="buttonTray" className="centered">
           <div id="joinGame" className="lobbyButton">Join</div>
           <div id="enterGame" className="lobbyButton">Create</div>

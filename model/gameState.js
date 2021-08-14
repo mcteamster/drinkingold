@@ -11,7 +11,7 @@ class GameState {
             phase: "setup",
             card: 0,
             score: 1,
-            turntime: 5000
+            turntime: 10000
         },
             this.deck = new Array(cardData.length).fill().map((a, i) => i), // Cards that haven't been drawn
             this.history = [], // What cards have been drawn
@@ -20,10 +20,10 @@ class GameState {
             this.players = [
             ],
             this.hazards = [
-                { "id": 1, "class": "A", "symbol": "👮", "active": 0 },
+                { "id": 1, "class": "A", "symbol": "🚨", "active": 0 },
                 { "id": 2, "class": "B", "symbol": "🤮", "active": 0 },
                 { "id": 3, "class": "C", "symbol": "☣️", "active": 0 },
-                { "id": 4, "class": "D", "symbol": "⛔", "active": 0 },
+                { "id": 4, "class": "D", "symbol": "🥾", "active": 0 },
                 { "id": 5, "class": "E", "symbol": "💔", "active": 0 }
             ],
             this.bonuses = [
@@ -71,11 +71,13 @@ class GameState {
                 })
             } else {
                 score += Math.floor(this.bonuses[0].value / leavers.length); // Split Remainders
-                this.bonuses[0].value = this.bonuses[0].value % leavers.length // Remainder of the remainders
             }
             player.roundScores[this.meta.round - 1] = score;
             player.totalScore += score;
         });
+        if(leavers.length >= 1) {
+            this.bonuses[0].value = this.bonuses[0].value % leavers.length // Remainder of the remainders
+        }
 
         // If there are still players
         if (this.players.filter(p => (p.active === true || p.active === this.meta.turn)).length > 0) {

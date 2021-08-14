@@ -2,10 +2,27 @@ import './styles/Forwards.css';
 import Hazards from './Hazards.js';
 
 function Forwards(props) {
+  const historyList = props.history.map((turn)=>
+    (<li key={`${turn.id}`}>
+      <Turn data={turn} meta={props.meta} />
+    </li>)
+  );
+
    return (
     <div className="Forwards play">
       <div className="head">🕑</div>
+      <ul className="historyList">
+        {historyList}
+      </ul>
       <Hazards info={props.hazards} />
+    </div>
+  );
+}
+
+function Turn(props) {
+  return (
+    <div className="Turn">
+      {props.data.symbol}&nbsp;{props.data.description}
     </div>
   );
 }

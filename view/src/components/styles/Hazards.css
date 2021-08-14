@@ -1,6 +1,5 @@
 .Hazards {
     color: midnightblue;
-    font-size: 1.5em;
     width: 100%;
     display: -webkit-flex;
     flex-direction: row;
@@ -8,4 +7,8 @@
     justify-content: space-around;
     text-align: center;
     flex-wrap: wrap;
+}
+
+.hazardSymbol {
+    font-size: 1.5em;
 }
