@@ -16,7 +16,7 @@ class Timer extends React.Component{
       let glass = document.querySelector(".Card");
       if(this.turntime === this.props.turntime - 1000){
         let fullness = 100*this.state.time/this.turntime - 10;
-        glass.style.backgroundImage = `linear-gradient(0deg, goldenrod, ${fullness}%, goldenrod, ${fullness}%, beige)`;
+        glass.style.backgroundImage = `linear-gradient(0deg, ${this.color}, ${fullness-1}%, ${this.color}, ${fullness-1}%, beige)`;
         if(this.state.time > 30){
           t = this.state.time - 30;
         } else {
@@ -25,6 +25,19 @@ class Timer extends React.Component{
       } else {
         t = this.props.turntime - 1000;
         this.turntime = t;
+        if(this.props.cardType === "hazard") {
+          this.hazardMax = Math.max(...(this.props.hazards.map(h => h.active)));
+          console.log(this.hazardMax)
+          if(this.hazardMax >= 2){
+            this.color = "red";
+          } else {
+            this.color = "aqua";
+          }
+        } else if(this.props.cardType === "bonus") {
+          this.color = "gold"
+        } else {
+          this.color = "goldenrod"
+        }
       }
       this.setState({time: t});
     }, 30)

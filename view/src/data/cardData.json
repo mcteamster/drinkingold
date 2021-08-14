@@ -1,5 +1,5 @@
 [
-    {"id": 0, "type": "start", "value": 0, "symbol": "🏁", "title": "GET READY", "description": "AW SH*T HERE WE GO AGAIN! It's easy to play: 👍 to kick on / 👎 to bail."},
+    {"id": 0, "type": "start", "value": 0, "symbol": "🏁", "title": "PREGAME", "description": "Finish your drink! Ride's almost here."},
     {"id": 1, "type": "points", "value": 1, "symbol": "🍺", "title": "A Cold One", "description": "One lonely iso tinnie..."},
     {"id": 2, "type": "points", "value": 2, "symbol": "🍺", "title": "Twoies Blue", "description": "Too easy mate, too easy."},
     {"id": 3, "type": "points", "value": 3, "symbol": "🍺", "title": "XXX Bronze", "description": "X hits the spot."},

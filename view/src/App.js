@@ -7,6 +7,7 @@ import Landing from './components/Landing';
 import Card from './components/Card';
 import Backwards from './components/Backwards';
 import Forwards from './components/Forwards';
+import Timer from "./components/Timer";
 import { Yeah, Nah } from './components/Buttons';
 import Endgame from './components/Endgame';
 
@@ -23,7 +24,8 @@ class App extends React.Component {
         turn: 0,
         phase: "setup",
         card: 0,
-        score: 0
+        score: 0,
+        turntime: 20000
       },
       players: [],
       hazards: [
@@ -34,7 +36,7 @@ class App extends React.Component {
         { "id": 5, "class": "E", "symbol": "💔", "active": 0 }
       ],
       bonuses: [
-        { "id": 0, "symbol": "🍺", "active": true, "value": 0 }
+        { "id": 0, "symbol": "🥤", "active": true, "value": 0 }
       ]
     };
   }
@@ -46,10 +48,30 @@ class App extends React.Component {
 
     // Bind Listeners to Buttons
     this.ws.onopen = () => {
-      // Submit
+      // Join
+      let join = document.querySelector('#joinGame');
+      join.addEventListener('click', () => {
+        let room = document.querySelector("#roomInput");
+        let name = document.querySelector("#nameInput");
+        if(room.value !== '') {
+          this.sendMsg("enter");
+        } else if (name.value !== '') {
+          room.style.display = "block";
+          name.style.display = "none";
+        } else {
+          name.style.border = '0.25em solid red';
+        }
+      });
+
+      // Enter
       let enter = document.querySelector('#enterGame');
       enter.addEventListener('click', () => {
-        this.sendMsg("enter");
+        let name = document.querySelector("#nameInput");
+        if (name.value !== '') {
+          this.sendMsg("enter");
+        } else {
+          name.style.border = '0.25em solid red';
+        }
       });
 
       // Start
@@ -59,7 +81,8 @@ class App extends React.Component {
 
       // YES
       document.querySelector('#yes').addEventListener('click', () => {
-        if(this.state.meta.card !== 0){
+        let hazardEnd = this.state.hazards.map(h => h.active).filter((active) => active >= 2).length;
+        if(this.state.meta.card !== 0 && hazardEnd === 0){
           this.sendMsg("yeah");
           let yes = document.querySelector('#yes')
           yes.classList.add('visible');
@@ -71,7 +94,8 @@ class App extends React.Component {
 
       // NO
       document.querySelector('#no').addEventListener('click', () => {
-        if(this.state.meta.card !== 0){
+        let hazardEnd = this.state.hazards.map(h => h.active).filter((active) => active >= 2).length;
+        if(this.state.meta.card !== 0 && hazardEnd === 0){
           this.sendMsg("nah");
           let no = document.querySelector('#no')
           no.classList.add('visible');
@@ -85,7 +109,7 @@ class App extends React.Component {
     // Update Game State
     this.ws.onmessage = (msg) => {
       msg = JSON.parse(msg.data);
-      console.dir(msg);
+      //console.dir(msg);
       switch(msg.meta?.type) {
         case "gameState":
           this.setState(msg);
@@ -108,14 +132,19 @@ class App extends React.Component {
           document.querySelector("#roomInput").style.display = "none";
           document.querySelector("#nameInput").style.display = "none";
           document.querySelector("#enterGame").style.display = "none";
+          document.querySelector("#joinGame").style.display = "none";
           break;
         case "rejoin":
           document.querySelector("#roomInput").style.display = "none";
           document.querySelector("#nameInput").style.display = "none";
           document.querySelector("#enterGame").style.display = "none";
+          document.querySelector("#joinGame").style.display = "none";
           break;
         case "error":
           console.error(new Date() + msg.meta.data);
+          if(msg.meta.code === "missingRoom") {
+            document.querySelector("#roomInput").style.border = "0.25em solid red";
+          }
           break;
         default:
           break;
@@ -179,8 +208,9 @@ class App extends React.Component {
       <div className="App">
         <Landing players={this.state.players} room={this.state.meta.room}/>
         <Backwards players={this.state.players} bonuses={this.state.bonuses} meta={this.state.meta} />
-        <Card data={cardData[this.state.meta.card]} meta={this.state.meta} />
+        <Card data={cardData[this.state.meta.card]} meta={this.state.meta}/>
         <Forwards players={this.state.players} hazards={this.state.hazards} meta={this.state.meta} />
+        <Timer turntime={this.state.meta.turntime} hazards={this.state.hazards} cardType={cardData[this.state.meta.card].type}/>
         <div className="head grey centered" id="down">👎</div>
         <div className="head grey centered" id="up">👍</div>
         <Yeah />

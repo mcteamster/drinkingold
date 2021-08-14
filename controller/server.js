@@ -38,7 +38,7 @@ ws.on('connection', function (socket) {
         // Lobby Init
         if (!this.lobby) {
             let room = parseInt(msg.roomID);
-            if (room > 0 && rooms.indexOf(room) != -1) {
+            if (room > 999 && rooms.indexOf(room) != -1) {
                 // Lookup Lobby and Retrieve
                 let l = lobbies.find(l => l.roomID == room);
                 if (l) {
@@ -59,6 +59,9 @@ ws.on('connection', function (socket) {
                     socket.send(JSON.stringify({ meta: { type: "error", data: "Room is missing, game may no longer be in progress." } }));
                     return;
                 }
+            } else if(!isNaN(room)) {
+                socket.send(JSON.stringify({ meta: { type: "error", data: "Room is missing, game may no longer be in progress.", code: "missingRoom" } }));
+                return;
             } else {
                 // Make a New Lobby!
                 let retries = 0;

@@ -3,20 +3,23 @@ import './styles/Player.css';
 function Player(props) {
   let score = props.score;
   let turn = props?.turn;
-  if(props.info.active != true && props.info.active != turn) {
+  if(props.info.active !== true && props.info.active !== turn) {
     score = 0;
   }
   let percent = 100*(props.info.totalScore/(props.info.totalScore + score));
+  let width = 0.1*(props.info.totalScore + score);
+
   let style = {
+    width: `${width}em`,
+    minWidth: "1.5em",
+    borderRadius: "25vw 2vw 25vw 2vw/2vw 25vw 2vw 25vw",
     backgroundColor: props.info.colour,
-    backgroundImage: `linear-gradient(90deg, ${props.info.colour}, ${percent}%, ${props.info.colour}, ${percent}%, rgba(0,0,0,0.25))` 
+    backgroundImage: `linear-gradient(90deg, ${props.info.colour}, ${percent}%, ${props.info.colour}, ${percent}%, rgba(255,255,255,0.66))` 
   }
 
-  style.borderRadius = "25vw 2vw 25vw 2vw/2vw 25vw 2vw 25vw";
-  style.width = `calc(1.5em + ${0.1*(props.info.totalScore + score)}em)`;
   return (
     <div className="Player">
-      <div className="meeple centered number" style={style}>{props.info.totalScore + score}</div>
+      <div className="meeple centered number" style={style}>{props.info.totalScore+score}</div>
       <div>{props.info.name}</div>
     </div>
   );

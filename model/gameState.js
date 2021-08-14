@@ -10,8 +10,8 @@ class GameState {
             turn: 1,
             phase: "setup",
             card: 0,
-            score: 0,
-            turntime: 20000
+            score: 1,
+            turntime: 5000
         },
             this.deck = new Array(cardData.length).fill().map((a, i) => i), // Cards that haven't been drawn
             this.history = [], // What cards have been drawn
@@ -27,7 +27,7 @@ class GameState {
                 { "id": 5, "class": "E", "symbol": "💔", "active": 0 }
             ],
             this.bonuses = [
-                { "id": 0, "class": "B0", "symbol": "🍺", "active": true, "value": 0 },
+                { "id": 0, "class": "B0", "symbol": "🥤", "active": true, "value": 0 },
                 { "id": 1, "class": "B1", "symbol": "🍗", "active": 0, "value": 0 },
                 { "id": 2, "class": "B2", "symbol": "🌯", "active": 0, "value": 0 },
                 { "id": 3, "class": "B3", "symbol": "🍕", "active": 0, "value": 0 },
@@ -138,10 +138,10 @@ class GameState {
 
         // Reset Card and Score
         this.meta.card = 0;
-        this.meta.score = 0;
+        this.meta.score = ++this.meta.round;
 
         // Next Round
-        if (++this.meta.round > 5) {
+        if (this.meta.round > 5) {
             this.meta.phase = "endgame";
         }
     }

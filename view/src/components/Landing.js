@@ -10,19 +10,29 @@ function Landing(props) {
       </li>)
     );
 
-    let lobbyMessage = (props.room) ? `🔑 ${props.room}` : `"Get on the beers"`
+    let lobbyMessage = (props.room) ? `🔑 ${props.room}` : `🍻`
 
     return (
       <div className="Landing setup">
-        <h1>Drinkin' Gold<br></br>🍻</h1>
+        <h1>Drinkin' Gold</h1>
+        <div id="instructions">
+          🎉 Get ready for 5 ripper nights out! Who will drink the most 🍻?<br></br>
+          👍 Tap right ➡️ to keep going and drink more🍺<br></br>
+          👎 Tap left ⬅️ to go home and pickup some goodies 🍕<br></br>
+          ⚠️ Look out for hazards - struck twice and your night is ruined 🤮
+        </div>
         <div className="number" id="lobbyMessage">{lobbyMessage}</div>
         <ul className="playerList">
             {playerList}
         </ul>
-        <input id="roomInput" type="text" placeholder="Room" maxLength="4"></input>
-        <input id="nameInput" type="text" placeholder="Name" maxLength="10"></input>
-        <div id="enterGame" className="rounded">ENTER</div>
-        <div id="startGame">START</div>
+        <input id="nameInput" type="text" placeholder="Name" maxLength="12"></input>
+        <input id="roomInput" className="hidden" type="number" placeholder="Room 🔑" min="1000" max="9999"></input>
+
+        <div id="buttonTray" className="centered">
+          <div id="joinGame" className="lobbyButton">Join</div>
+          <div id="enterGame" className="lobbyButton">Create</div>
+          <div id="startGame" className="lobbyButton hidden">START</div>
+        </div>
       </div>
     );
 }
