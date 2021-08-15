@@ -25,7 +25,7 @@ function Player(props) {
   return (
     <div className="Player">
       <div className="meeple centered number" style={style}>{props.info.totalScore+score}</div>
-      <div style={nameStyle}>{props.info.name}</div>
+      <div style={nameStyle}>{props.info.name}&nbsp;<span id={`status${props.info.id}`} className="readyStatus"></span></div>
     </div>
   );
 }

@@ -93,6 +93,7 @@ ws.on('connection', function (socket) {
             case "setup":
                 if (authed && msg.playerID === "1" && msg.data === "start") {
                     this.lobby.gs.meta.phase = "play"; // Host can start the game 
+                    this.lobby.gs.meta.turntime = 30000; // Set Turn Timer TODO Customise
                     tick(this.lobby, this.lobby.gs.meta.turntime);
                 } else if (this.lobby.checkPlayer(msg) == true) {
                     socket.send(JSON.stringify({ meta: { type: "rejoin", data: "Welcome Back" } }))
@@ -104,7 +105,20 @@ ws.on('connection', function (socket) {
             case "play":
                 // Collect intent from all players until time is up
                 if (authed) {
-                    socket.send(JSON.stringify(this.lobby.gs.setIntent(msg)));
+                    let voted = this.lobby.gs.setIntent(msg);
+                    let allVoted = this.lobby.gs.getActive().map((p) => {
+                        return voted[p.id];
+                    }).reduce((x, y) => 
+                        {return x && y}
+                    );
+                    if(allVoted) {
+                        // Proceed Early if All Players have explictly voted
+                        clearTimeout(this.lobby.nextTurn);
+                        nextTurn(this.lobby);
+                    } else {
+                        // Brodcast Vote Status Updates
+                        this.lobby.sockets.forEach(s => s.send(JSON.stringify({ meta: { type: "readyStatus", data: voted } }))); // Broadcast Updates
+                    }
                 }
                 break;
             case "endgame":

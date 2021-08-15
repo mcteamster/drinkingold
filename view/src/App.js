@@ -25,7 +25,7 @@ class App extends React.Component {
         phase: "setup",
         card: 0,
         score: 0,
-        turntime: 20000
+        turntime: 0
       },
       history: [],
       players: [],
@@ -39,6 +39,45 @@ class App extends React.Component {
       bonuses: [
         { "id": 0, "symbol": "🥤", "active": true, "value": 0 }
       ]
+    };
+  }
+
+  yes() {
+    let hazardEnd = this.state.hazards.map(h => h.active).filter((active) => active >= 2).length;
+    let p = this.state.players.find((x) => x.id === parseInt(sessionStorage.getItem("playerID")));
+    if(hazardEnd === 0 && (p.active === true || p.active === this.state.meta.turn)){
+      this.sendMsg("yeah");
+      let yes = document.querySelector('#yes')
+      yes.classList.add('visible');
+      setTimeout(()=>{
+        yes.classList.remove('visible');
+      }, 1000);
+    }
+  }
+
+  no(){
+    let hazardEnd = this.state.hazards.map(h => h.active).filter((active) => active >= 2).length;
+    let p = this.state.players.find((x) => x.id === parseInt(sessionStorage.getItem("playerID")));
+    if(this.state.meta.card !== 0 && hazardEnd === 0 && (p.active === true || p.active === this.state.meta.turn)){
+      this.sendMsg("nah");
+      let no = document.querySelector('#no')
+      no.classList.add('visible');
+      setTimeout(()=>{
+        no.classList.remove('visible');
+      }, 1000);
+    }
+  }
+
+  showScores() {
+    document.querySelector('#scoreboard').classList.toggle("invisible");
+  }
+
+  showHist() {
+    let historyList = document.querySelector('.historyList');
+    if(historyList.style.visibility === "hidden") {
+      historyList.style.visibility = "visible";
+    } else {
+      historyList.style.visibility = "hidden";
     };
   }
 
@@ -81,65 +120,62 @@ class App extends React.Component {
       document.querySelector('#startGame').addEventListener('click', () => {
         this.sendMsg("start");
       });
-
       // YES
-      document.querySelector('#yes').addEventListener('click', () => {
-        let hazardEnd = this.state.hazards.map(h => h.active).filter((active) => active >= 2).length;
-        if(this.state.meta.card !== 0 && hazardEnd === 0){
-          this.sendMsg("yeah");
-          let yes = document.querySelector('#yes')
-          yes.classList.add('visible');
-          setTimeout(()=>{
-            yes.classList.remove('visible');
-          }, 1000);
-        }
-      });
-
+      document.querySelector('#yes').addEventListener('click', () => {this.yes()});
       // NO
-      document.querySelector('#no').addEventListener('click', () => {
-        let hazardEnd = this.state.hazards.map(h => h.active).filter((active) => active >= 2).length;
-        if(this.state.meta.card !== 0 && hazardEnd === 0){
-          this.sendMsg("nah");
-          let no = document.querySelector('#no')
-          no.classList.add('visible');
-          setTimeout(()=>{
-            no.classList.remove('visible');
-          }, 1000);
-        }
-      });
-
+      document.querySelector('#no').addEventListener('click', () => {this.no()});
       // Show Scores
       document.querySelector('#showScore').addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        document.querySelector('#scoreboard').classList.toggle("invisible");
+        this.showScores();
       });
-
       // Show History
       document.querySelector('#showHistory').addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        let historyList = document.querySelector('.historyList');
-        if(historyList.style.visibility === "hidden") {
-          historyList.style.visibility = "visible";
-        } else {
-          historyList.style.visibility = "hidden";
-        };
+        this.showHist();
       });
+
+      // Hotkeys
+      document.addEventListener('keydown', (e)=>{
+        switch(e.key){
+          case 'ArrowLeft':
+            this.no();
+            break;
+          case 'ArrowRight':
+            this.yes();
+            break;
+          case 'h':
+            this.showHist();
+            break;
+          case 's':
+            this.showScores();
+            break;
+          default:
+            break;
+        }
+      })
     };
 
     // Update Game State
     this.ws.onmessage = (msg) => {
       msg = JSON.parse(msg.data);
-      //console.dir(msg);
       switch(msg.meta?.type) {
         case "gameState":
           this.setState(msg);
-          //if(this.state.meta.card === 0 || this.state.players.filter(p=>(p.active === true)).length === 0) {
-          //}
+          // Play Sound Effect
+          document.querySelectorAll(`#scoreboard li .Player .readyStatus`).forEach(e => e.innerText = ""); // Clear Status Markers
           document.querySelectorAll(".setup").forEach(e => e.style.visibility = (msg.meta.phase === "setup") ? "visible" : "hidden");
           document.querySelectorAll(".play").forEach(e => e.style.visibility = (msg.meta.phase === "play") ? "visible" : "hidden");
           document.querySelectorAll(".endgame").forEach(e => e.style.visibility = (msg.meta.phase === "endgame") ? "visible" : "hidden");
+          break;
+        case "readyStatus":
+          Object.keys(msg.meta.data).forEach(key => {
+            if(msg.meta.data[key] === true) {
+              document.querySelector(`#scoreboard li .Player #status${key}`).innerText = "✔️";
+            }
+          });
           break;
         case "secret":
           sessionStorage.setItem("playerID", msg.id);
@@ -228,8 +264,8 @@ class App extends React.Component {
         <Yeah />
         <Nah />
         <Endgame players={this.state.players} />
-        <div id='showHistory'></div>
-        <div id='showScore'></div>
+        <div id='showHistory' className="play"><div className="head centered">🕑</div></div>
+        <div id='showScore' className="play"><div className="head centered">🏅</div></div>
       </div>
     );
   }

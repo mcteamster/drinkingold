@@ -11,11 +11,12 @@ class GameState {
             phase: "setup",
             card: 0,
             score: 1,
-            turntime: 10000
+            turntime: 0
         },
             this.deck = new Array(cardData.length).fill().map((a, i) => i), // Cards that haven't been drawn
             this.history = [], // What cards have been drawn
             this.burnt = [], // Cards that will no longer appear
+            this.voted = {}, // Players who have explictly voted
             this.delta = [], // This is what the client will animate
             this.players = [
             ],
@@ -43,21 +44,32 @@ class GameState {
             let p = this.players.find(x => x.id == player.playerID);
             if (p.active === true || p.active === this.meta.turn) {
                 (player.data === true) ? p.active = true : p.active = this.meta.turn; // Mark when you left (the card after which you leave)
+                this.voted[p.id] = true;
             }
-            return new Date();
+            return this.voted;
         } catch (err) {
             console.error(new Date() + err);
             return false;
         }
     }
 
+    // Get List of Active Players
+    getActive() {
+        return this.players.filter((p)=>{
+            return (p.active === true || p.active === this.meta.turn);
+        })
+    }
+
     // Calculate new Game State
     update() {
         // Housekeeping
         this.meta.turntime *= 0.98; // Every turn gets 2% shorter
-        this.history.push(cardData[this.meta.card]); // Archive old card
+        let card = Object.assign({}, cardData[this.meta.card]); // Get current card data
+        card.drawnTurn = this.meta.turn; // Stamp the drawn turn
+        this.history.push(card); // Archive old card
         this.deck = this.deck.filter((c => c !== this.meta.card)) // Remove from deck
         this.meta.turn++; // Increment Turn (lock in the intents);
+        this.voted = {}; // Reset explicit voters
 
         // Leavers Score
         let leavers = this.players.filter(p => p.active === this.meta.turn - 1);

@@ -19,7 +19,7 @@ function Landing(props) {
           🎉 Get ready for 5 ripper nights out! Who will drink the most 🍻?<br></br>
           👍 Tap right ➡️ to keep going and drink more🍺<br></br>
           👎 Tap left ⬅️ to go home and pickup some goodies 🍕<br></br>
-          ⚠️ Look out for hazards - struck twice and your night is ruined 🤮
+          ⚠️ Look out for hazards - 2 strikes will ruin your night 🤮
         </div>
         <ul className="playerList">
             {playerList}

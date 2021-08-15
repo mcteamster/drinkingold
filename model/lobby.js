@@ -151,10 +151,6 @@ class Lobby {
             return false;
         }
     }
-
-    cleanup() {
-
-    }
 }
 
 module.exports = Lobby;

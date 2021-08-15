@@ -108,31 +108,35 @@
   }
 
   #showScore {
-    z-index: 4;
+    z-index: 3;
     visibility: visible;
-    position: absolute;
+    position: fixed;
     width: 6em;
     height: 6em;
     padding: 0;
     margin: 0;
-    bottom: calc(10vh + 70px);
+    bottom: 0;
     left: 0;
   }
   
   #showHistory {
-    z-index: 4;
+    z-index: 3;
     visibility: visible;
-    position: absolute;
+    position: fixed;
     width: 6em;
     height: 6em;
     padding: 0;
     margin: 0;
-    bottom: calc(10vh + 70px);
+    bottom: 0;
     right: 0;
   }
 
   .mobileHide {
     display: none;
+  }
+
+  .mobileInvis {
+    visibility: hidden;
   }
 
   .head {

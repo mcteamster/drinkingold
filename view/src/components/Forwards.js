@@ -3,14 +3,14 @@ import Hazards from './Hazards.js';
 
 function Forwards(props) {
   const historyList = props.history.map((turn)=>
-    (<li key={`${turn.id}`}>
+    (<li key={`${turn.drawnTurn}`}>
       <Turn data={turn} meta={props.meta} />
     </li>)
   );
 
    return (
     <div className="Forwards play">
-      <div className="head">🕑</div>
+      <div className="head mobileInvis">🕑</div>
       <ul className="historyList">
         {historyList}
       </ul>
