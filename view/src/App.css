@@ -107,8 +107,15 @@
     grid-row-end: 4;
   }
 
+  .Wait {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 4;
+  }
+
   #showScore {
-    z-index: 3;
+    z-index: 5;
     visibility: visible;
     position: fixed;
     width: 6em;
@@ -120,7 +127,7 @@
   }
   
   #showHistory {
-    z-index: 3;
+    z-index: 5;
     visibility: visible;
     position: fixed;
     width: 6em;
@@ -179,6 +186,12 @@
     grid-row: 1;
     grid-column-start: 1;
     grid-column-end: 3;
+  }
+
+  .Wait {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row: 1
   }
 
   #showScore {

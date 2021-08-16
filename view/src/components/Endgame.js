@@ -13,7 +13,7 @@ function Endgame(props) {
     return (
       <div className="Endgame endgame">
         <h1>Final Scores</h1>
-        <div className="head">🏅</div>
+        <div className="head">🏆</div>
         <ul className="playerList">
             {playerList}
         </ul>

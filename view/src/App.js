@@ -8,7 +8,7 @@ import Card from './components/Card';
 import Backwards from './components/Backwards';
 import Forwards from './components/Forwards';
 import Timer from "./components/Timer";
-import { Yeah, Nah } from './components/Buttons';
+import { Yeah, Nah, Wait} from './components/Buttons';
 import Endgame from './components/Endgame';
 
 // Card Data
@@ -45,13 +45,13 @@ class App extends React.Component {
   yes() {
     let hazardEnd = this.state.hazards.map(h => h.active).filter((active) => active >= 2).length;
     let p = this.state.players.find((x) => x.id === parseInt(sessionStorage.getItem("playerID")));
-    if(hazardEnd === 0 && (p.active === true || p.active === this.state.meta.turn)){
+    if(this.state.meta.round <= 5 && hazardEnd === 0 && (p.active === true || p.active === this.state.meta.turn)){
       this.sendMsg("yeah");
       let yes = document.querySelector('#yes')
       yes.classList.add('visible');
       setTimeout(()=>{
         yes.classList.remove('visible');
-      }, 1000);
+      }, 500);
     }
   }
 
@@ -64,7 +64,7 @@ class App extends React.Component {
       no.classList.add('visible');
       setTimeout(()=>{
         no.classList.remove('visible');
-      }, 1000);
+      }, 500);
     }
   }
 
@@ -164,7 +164,16 @@ class App extends React.Component {
       switch(msg.meta?.type) {
         case "gameState":
           this.setState(msg);
-          // Play Sound Effect
+
+          // Crawling Animation
+          if(msg.meta.phase === "play" || msg.meta.phase === "endgame") {
+            let wait = document.querySelector('#wait')
+            wait.classList.add('visible');
+            setTimeout(()=>{
+              wait.classList.remove('visible');
+            }, 2000);
+          }
+
           document.querySelectorAll(`#scoreboard li .Player .readyStatus`).forEach(e => e.innerText = ""); // Clear Status Markers
           document.querySelectorAll(".setup").forEach(e => e.style.visibility = (msg.meta.phase === "setup") ? "visible" : "hidden");
           document.querySelectorAll(".play").forEach(e => e.style.visibility = (msg.meta.phase === "play") ? "visible" : "hidden");
@@ -263,6 +272,7 @@ class App extends React.Component {
         <Timer turntime={this.state.meta.turntime} hazards={this.state.hazards} cardType={cardData[this.state.meta.card].type}/>
         <Yeah />
         <Nah />
+        <Wait state={this.state}/>
         <Endgame players={this.state.players} />
         <div id='showHistory' className="play"><div className="head centered">🕑</div></div>
         <div id='showScore' className="play"><div className="head centered">🏅</div></div>

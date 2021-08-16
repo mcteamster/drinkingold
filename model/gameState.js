@@ -79,7 +79,12 @@ class GameState {
                 this.bonuses.filter(b => b.active !== 0).forEach((bonus) => {
                     score += bonus.value; // Collect All Bonuses
                     bonus.value = 0; // Reset Bonus Value
-                    (bonus.class !== "B0") ? bonus.active = 0 : bonus.active = true; // Disable Bonus
+                    if(bonus.class !== "B0"){
+                        bonus.active = 0;
+                        this.burnt.push(cardData.find(c => c.class === bonus.class).id);
+                    } else {
+                        bonus.active = true;
+                    }
                 })
             } else {
                 score += Math.floor(this.bonuses[0].value / leavers.length); // Split Remainders
@@ -149,6 +154,7 @@ class GameState {
 
         // Replenish the deck
         this.deck = new Array(cardData.length).fill().map((a, i) => i).filter(b => !this.burnt.includes(b)); // Filter out burnt cards
+        console.log(this.burnt, this.deck);
 
         // Reset Card and Score
         this.meta.card = 0;

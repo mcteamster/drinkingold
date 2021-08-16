@@ -1,13 +1,20 @@
 .Yeah {
-    z-index: 3;
+    z-index: 5;
     background-color: forestgreen;
     font-size: 5em;
     text-align: center;
 }
 
 .Nah {
-    z-index: 3;
+    z-index: 5;
     background-color: gold;
+    font-size: 5em;
+    text-align: center;
+}
+
+.Wait {
+    z-index: 4;
+    background-color: beige;
     font-size: 5em;
     text-align: center;
 }
