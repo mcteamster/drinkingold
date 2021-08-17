@@ -9,7 +9,7 @@ function Hazards(props) {
 
   return (
     <div className="Hazards">
-      <li className="tip">Beware! Two encounters will ruin your night</li>
+      <li className="tip">Strike twice and your night is over</li>
       {hazardList}
     </div>
   );
