@@ -30,10 +30,10 @@ class GameState {
             this.bonuses = [
                 { "id": 0, "class": "B0", "symbol": "🥤", "active": true, "value": 0 },
                 { "id": 1, "class": "B1", "symbol": "🍗", "active": 0, "value": 0 },
-                { "id": 2, "class": "B2", "symbol": "🌯", "active": 0, "value": 0 },
+                { "id": 2, "class": "B2", "symbol": "🌮", "active": 0, "value": 0 },
                 { "id": 3, "class": "B3", "symbol": "🍕", "active": 0, "value": 0 },
-                { "id": 4, "class": "B4", "symbol": "🛑", "active": 0, "value": 0 },
-                { "id": 5, "class": "B5", "symbol": "💸", "active": 0, "value": 0 }
+                { "id": 4, "class": "B4", "symbol": "🍟", "active": 0, "value": 0 },
+                { "id": 5, "class": "B5", "symbol": "🍜", "active": 0, "value": 0 }
             ]
     }
 
