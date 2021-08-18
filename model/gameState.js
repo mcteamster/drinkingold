@@ -154,7 +154,6 @@ class GameState {
 
         // Replenish the deck
         this.deck = new Array(cardData.length).fill().map((a, i) => i).filter(b => !this.burnt.includes(b)); // Filter out burnt cards
-        console.log(this.burnt, this.deck);
 
         // Reset Card and Score
         this.meta.card = 0;

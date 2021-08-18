@@ -21,7 +21,7 @@ h1 {
 input {
     margin: 0.5em;
     padding: 0.5em;
-    border-radius: 5vw 15vw 5vw 15vw/15vw 5vw 15vw 5vw;
+    border-radius: 25vw 2vw 25vw 2vw/2vw 25vw 2vw 25vw;
     border-style: none;
     background: lightgrey;
     color: midnightblue;
@@ -41,7 +41,7 @@ input {
     width: 5em;
     margin:  0.25em;
     padding: 0.25em 0em;
-    border-radius: 5vw 15vw 5vw 15vw/15vw 5vw 15vw 5vw;
+    border-radius: 25vw 2vw 25vw 2vw/2vw 25vw 2vw 25vw;
 }
 
 .hidden {

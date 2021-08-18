@@ -43,42 +43,50 @@ class App extends React.Component {
   }
 
   yes() {
-    let hazardEnd = this.state.hazards.map(h => h.active).filter((active) => active >= 2).length;
-    let p = this.state.players.find((x) => x.id === parseInt(sessionStorage.getItem("playerID")));
-    if(this.state.meta.round <= 5 && hazardEnd === 0 && (p.active === true || p.active === this.state.meta.turn)){
-      this.sendMsg("yeah");
-      let yes = document.querySelector('#yes')
-      yes.classList.add('visible');
-      setTimeout(()=>{
-        yes.classList.remove('visible');
-      }, 500);
+    if(this.state.meta.phase === "play") {
+      let hazardEnd = this.state.hazards.map(h => h.active).filter((active) => active >= 2).length;
+      let p = this.state.players.find((x) => x.id === parseInt(sessionStorage.getItem("playerID")));
+      if(this.state.meta.round <= 5 && hazardEnd === 0 && (p.active === true || p.active === this.state.meta.turn)){
+        this.sendMsg("yeah");
+        let yes = document.querySelector('#yes')
+        yes.classList.add('visible');
+        setTimeout(()=>{
+          yes.classList.remove('visible');
+        }, 500);
+      }
     }
   }
 
   no(){
-    let hazardEnd = this.state.hazards.map(h => h.active).filter((active) => active >= 2).length;
-    let p = this.state.players.find((x) => x.id === parseInt(sessionStorage.getItem("playerID")));
-    if(this.state.meta.card !== 0 && hazardEnd === 0 && (p.active === true || p.active === this.state.meta.turn)){
-      this.sendMsg("nah");
-      let no = document.querySelector('#no')
-      no.classList.add('visible');
-      setTimeout(()=>{
-        no.classList.remove('visible');
-      }, 500);
+    if(this.state.meta.phase === "play") {
+      let hazardEnd = this.state.hazards.map(h => h.active).filter((active) => active >= 2).length;
+      let p = this.state.players.find((x) => x.id === parseInt(sessionStorage.getItem("playerID")));
+      if(this.state.meta.card !== 0 && hazardEnd === 0 && (p.active === true || p.active === this.state.meta.turn)){
+        this.sendMsg("nah");
+        let no = document.querySelector('#no')
+        no.classList.add('visible');
+        setTimeout(()=>{
+          no.classList.remove('visible');
+        }, 500);
+      }
     }
   }
 
   showScores() {
-    document.querySelector('#scoreboard').classList.toggle("invisible");
+    if(this.state.meta.phase === "play") {
+      document.querySelector('#scoreboard').classList.toggle("invisible");
+    }
   }
 
   showHist() {
-    let historyList = document.querySelector('.historyList');
-    if(historyList.style.visibility === "hidden") {
-      historyList.style.visibility = "visible";
-    } else {
-      historyList.style.visibility = "hidden";
-    };
+    if(this.state.meta.phase === "play") {
+      let historyList = document.querySelector('.historyList');
+      if(historyList.style.visibility === "hidden") {
+        historyList.style.visibility = "visible";
+      } else {
+        historyList.style.visibility = "hidden";
+      };
+    }
   }
 
   componentDidMount() {
@@ -94,8 +102,10 @@ class App extends React.Component {
         let room = document.querySelector("#roomInput");
         let name = document.querySelector("#nameInput");
         if(room.value !== '') {
+          document.querySelector("#warning").innerText = "";
           this.sendMsg("enter");
         } else if (name.value !== '') {
+          document.querySelector("#warning").innerText = "";
           room.style.display = "block";
           name.style.display = "none";
           document.querySelector("#enterGame").style.display = "none";
@@ -198,6 +208,9 @@ class App extends React.Component {
           document.querySelector("#joinGame").style.display = "none";
           break;
         case "rejoin":
+          if (sessionStorage.getItem("playerID") === "1") {
+            document.querySelector("#startGame").style.display = "block";
+          }
           document.querySelector("#roomInput").style.display = "none";
           document.querySelector("#nameInput").style.display = "none";
           document.querySelector("#enterGame").style.display = "none";
@@ -207,6 +220,11 @@ class App extends React.Component {
           console.error(new Date() + msg.meta.data);
           if(msg.meta.code === "missingRoom") {
             document.querySelector("#roomInput").style.border = "0.25em solid red";
+            document.querySelector("#warning").innerText = "Invalid Room";
+          } else if(msg.meta.code === "takenName") {
+            document.querySelector("#nameInput").style.display = "block";
+            document.querySelector("#nameInput").style.border = "0.25em solid yellow";
+            document.querySelector("#warning").innerText = "Name Already Taken";
           }
           break;
         default:

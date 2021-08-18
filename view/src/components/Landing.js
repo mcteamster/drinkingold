@@ -25,8 +25,9 @@ function Landing(props) {
             {playerList}
         </ul>
         <div className="number" id="lobbyMessage">{lobbyMessage}</div>
-        <input id="nameInput" type="text" placeholder="Name 👋" maxLength="12"></input>
         <input id="roomInput" className="hidden" type="number" placeholder="Room 🔑" min="1000" max="9999"></input>
+        <input id="nameInput" type="text" placeholder="Name 👋" maxLength="12"></input>
+        <div id="warning"></div>
         <div id="buttonTray" className="centered">
           <div id="joinGame" className="lobbyButton">Join</div>
           <div id="enterGame" className="lobbyButton">Create</div>

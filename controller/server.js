@@ -97,6 +97,10 @@ ws.on('connection', function (socket) {
                     tick(this.lobby, this.lobby.gs.meta.turntime);
                 } else if (this.lobby.checkPlayer(msg) == true) {
                     socket.send(JSON.stringify({ meta: { type: "rejoin", data: "Welcome Back" } }))
+                } else if(this.lobby.players.find(x => (x.name === msg.data))) {
+                    // Error on Name Colissions
+                    socket.send(JSON.stringify({ meta: { type: "error", data: "Someone has already taken that name!", code: "takenName" } }));
+                    return;
                 } else {
                     socket.send(JSON.stringify(this.lobby.addPlayer(msg))); // Add player to the lobby and return secret
                 }
@@ -164,4 +168,4 @@ setInterval(()=>{
 }, 1000*60*10)
 
 // Welcome to the Game
-console.log(new Date() + " Welcome to Drinkin' Gold")
+console.info(new Date() + " Welcome to Drinkin' Gold")
