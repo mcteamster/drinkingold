@@ -64,4 +64,8 @@ input {
     input {
         font-size: 1.5em;
     }
+
+    #instructions {
+        font-size: 1.5em;
+    }
 }
