@@ -37,7 +37,7 @@ class App extends React.Component {
         { "id": 5, "class": "E", "symbol": "💔", "active": 0 }
       ],
       bonuses: [
-        { "id": 0, "symbol": "🥤", "active": true, "value": 0 }
+        { "id": 0, "symbol": "🥤", "active": false, "value": 0 }
       ]
     };
   }
@@ -284,8 +284,8 @@ class App extends React.Component {
     return (
       <div className="App">
         <Landing players={this.state.players} room={this.state.meta.room}/>
-        <Backwards players={this.state.players} bonuses={this.state.bonuses} meta={this.state.meta} />
-        <Card data={cardData[this.state.meta.card]} meta={this.state.meta}/>
+        <Backwards players={this.state.players} meta={this.state.meta} />
+        <Card data={cardData[this.state.meta.card]} meta={this.state.meta} />
         <Forwards history={this.state.history} hazards={this.state.hazards} meta={this.state.meta} />
         <Timer turntime={this.state.meta.turntime} hazards={this.state.hazards} cardType={cardData[this.state.meta.card].type}/>
         <Yeah />

@@ -1,6 +1,5 @@
 import './styles/Backwards.css';
 import Player from './Player.js';
-import Bonuses from './Bonuses.js';
 
 function Backwards(props) {
   const players = props.players.sort((a,b)=> a.name > b.name).sort((a,b)=> {
@@ -16,11 +15,9 @@ function Backwards(props) {
 
   return (
     <div className="Backwards play">
-      <div className="head mobileInvis">🏅</div>
       <ul className="playerList" id="scoreboard">
         {playerList}
       </ul>
-      <Bonuses info={props.bonuses}/>
     </div>
   );
 }

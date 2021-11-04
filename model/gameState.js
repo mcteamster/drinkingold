@@ -28,7 +28,7 @@ class GameState {
                 { "id": 5, "class": "E", "symbol": "💔", "active": 0 }
             ],
             this.bonuses = [
-                { "id": 0, "class": "B0", "symbol": "🥤", "active": true, "value": 0 },
+                { "id": 0, "class": "B0", "symbol": "🥤", "active": false, "value": 0 },
                 { "id": 1, "class": "B1", "symbol": "🍗", "active": 0, "value": 0 },
                 { "id": 2, "class": "B2", "symbol": "🌮", "active": 0, "value": 0 },
                 { "id": 3, "class": "B3", "symbol": "🍕", "active": 0, "value": 0 },
@@ -75,36 +75,39 @@ class GameState {
         let leavers = this.players.filter(p => p.active === this.meta.turn - 1);
         leavers.forEach((player) => {
             let score = this.meta.score; // Round Score
-            if (leavers.length === 1) {
-                this.bonuses.filter(b => b.active !== 0).forEach((bonus) => {
-                    score += bonus.value; // Collect All Bonuses
-                    bonus.value = 0; // Reset Bonus Value
-                    if(bonus.class !== "B0"){
-                        bonus.active = 0;
-                        this.burnt.push(cardData.find(c => c.class === bonus.class).id);
-                    } else {
-                        bonus.active = true;
-                    }
-                })
-            } else {
-                score += Math.floor(this.bonuses[0].value / leavers.length); // Split Remainders
-            }
+            this.bonuses.filter(b => b.active !== 0).forEach((bonus) => {
+                score += bonus.value; // Collect All Bonuses
+            })
             player.roundScores[this.meta.round - 1] = score;
             player.totalScore += score;
         });
-        if(leavers.length >= 1) {
-            this.bonuses[0].value = this.bonuses[0].value % leavers.length // Remainder of the remainders
-        }
+
+        // Burn Bonuses
+        this.bonuses.forEach(bonus => {
+            if (bonus.class !== "B0" && bonus.active === true) {
+                bonus.active = 0;
+                this.burnt.push(cardData.find(c => c.class === bonus.class).id);
+            }
+            bonus.value = 0;
+        });
 
         // If there are still players
-        if (this.players.filter(p => (p.active === true || p.active === this.meta.turn)).length > 0) {
+        if (this.players.filter(p => (p.active === true || p.active === this.meta.turn)).length > 0) {           
             // Flip It
             this.meta.card = this.deck[Math.floor(Math.random() * this.deck.length)] // RNG a new card from the deck
             let newCard = cardData[this.meta.card]; // Get Current Card
             switch (newCard?.type) {
                 case "points":
-                    this.meta.score += Math.floor(newCard.value / this.players.filter(p => (p.active === true || p.active === this.meta.turn)).length); // Increase Round Score
-                    this.bonuses[0].value += newCard.value % this.players.filter(p => (p.active === true || p.active === this.meta.turn)).length; // Remainders
+                    if(this.players.filter(p => (p.active === true || p.active === this.meta.turn)).length > 3) {
+                        // Constant Scores
+                        this.meta.score += newCard.value;
+                    } else if(this.players.filter(p => (p.active === true || p.active === this.meta.turn)).length > 1) {
+                        // Last 3 players get double points
+                        this.meta.score += newCard.value * 2;
+                    } else {
+                        // Last person standing gets triple points
+                        this.meta.score += newCard.value * 3;
+                    }
                     break;
                 case "hazard":
                     let hazard = this.hazards.find(h => h.class === newCard.class); // Activate Hazard
@@ -120,7 +123,7 @@ class GameState {
                 case "bonus":
                     let bonus = this.bonuses.find(b => b.class === newCard.class)
                     bonus.active = true;
-                    (this.history.filter(c => c.type === "bonus").length > 3) ? bonus.value = 10 : bonus.value = 5;
+                    bonus.value = 10;
                     break;
                 default:
                     console.error(new Date() + "Card Type Mismatch");
