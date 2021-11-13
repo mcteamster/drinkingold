@@ -3,7 +3,7 @@ import './styles/Buttons.css';
 function Yeah() {
   return (
     <div className="Yeah centered invisible" id="yes">
-      <b>YEAH!<br></br>👍</b>
+      <b>YEAH!👍<br></br><br></br><br></br></b>
     </div>
   );
 }
@@ -11,7 +11,7 @@ function Yeah() {
 function Nah() {
   return (
     <div className="Nah centered invisible" id="no">
-      <b>nah.<br></br>👎</b>
+      <b><br></br><br></br>nah.👎</b>
     </div>
   );
 }
@@ -78,14 +78,14 @@ function Wait(props) {
       message = "Snoozin'";
       icon = "😴";
     }
-  } else {
+  } else if(props.state.meta.phase === "endgame"){
     message = "Ending the sesh...";
     icon = "🏠";
   }
 
   return (
     <div className="Wait centered invisible" id="wait">
-      <b>{message}<br></br>{icon}</b>
+      <b>{message}&nbsp;{icon}</b>
     </div>
   );
 }

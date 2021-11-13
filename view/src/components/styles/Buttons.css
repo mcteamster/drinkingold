@@ -1,13 +1,15 @@
 .Yeah {
     z-index: 5;
-    background-color: forestgreen;
+    background-color: rgba(0,0,0,0);
+    color: forestgreen;
     font-size: 5em;
     text-align: center;
 }
 
 .Nah {
     z-index: 5;
-    background-color: gold;
+    background-color: rgba(0,0,0,0);
+    color: gold;
     font-size: 5em;
     text-align: center;
 }

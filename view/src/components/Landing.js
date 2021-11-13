@@ -16,11 +16,10 @@ function Landing(props) {
       <div className="Landing setup">
         <h1>Drinkin' Gold</h1>
         <div id="instructions">
-          🎉&nbsp;Get&nbsp;ready&nbsp;for&nbsp;a&nbsp;5&nbsp;day&nbsp;bender! Who&nbsp;will&nbsp;drink&nbsp;the&nbsp;most&nbsp;🍻?<br></br>
-          👍 Tap right ➡️ to keep drinking 🍺<br></br>
-          👎 Tap left ⬅️ to go to sleep 😴<br></br>
-          🍕 Maybe pick up a snacc on the way home?<br></br>
-          ⚠️&nbsp;Look&nbsp;out&nbsp;for&nbsp;hazards - 2&nbsp;strikes&nbsp;will&nbsp;ruin&nbsp;your&nbsp;night&nbsp;🤮
+          🎉&nbsp;It's&nbsp;a&nbsp;5&nbsp;day&nbsp;pub&nbsp;crawl! Can&nbsp;you&nbsp;drink&nbsp;the&nbsp;most?<br></br>
+          ➡️ Tap right to kick on 👍 and drink more! 🍻<br></br>
+          ⬅️ Tap left to bail 👎 or grab a bite on the way home 🍕<br></br>
+          ⚠️&nbsp;Watch&nbsp;for&nbsp;hazards! Two&nbsp;strikes&nbsp;end&nbsp;your&nbsp;night&nbsp;🤮
         </div>
         <ul className="playerList" id="lobbyList">
             {playerList}
