@@ -5,7 +5,7 @@
   "main": "controller/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "../infra/deploy-drinkingold.sh"
+    "deploy": "../.ci/deploy-drinkingold.sh"
   },
   "repository": {
     "type": "git",
