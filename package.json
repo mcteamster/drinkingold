@@ -5,7 +5,6 @@
   "main": "controller/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "mcdeploy drinkingold",
     "start": "node ./controller/server.js"
   },
   "repository": {
