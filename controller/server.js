@@ -58,7 +58,7 @@ const server = http.createServer((req, res) => {
 
 const ws = new WebSocket.Server({ noServer: true });
 
-server.listen(80);
+server.listen(process.env.PORT || 80);
 server.on('upgrade', (request, socket, head) => {
     ws.handleUpgrade(request, socket, head, socket => {
         ws.emit('connection', socket, request);
